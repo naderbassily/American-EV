@@ -377,11 +377,7 @@ body.page-template-page-services .primary-nav > a:first-child, .primary-nav .is-
 
 .filters-catalog ul.products li.product .button { display: inline-flex; align-items: center; justify-content: center; align-self: start; min-height: 46px; padding: 12px 26px; border-radius: 999px; font-size: 15px; font-weight: 700; letter-spacing: .005em; transition: transform .25s ease, background .25s ease, color .25s ease, border-color .25s ease; }
 .filters-catalog ul.products li.product .button:hover { transform: translateY(-2px); }
-/* Products with no price render "Read more" instead of a cart action - keep it
-   visually secondary so a real buy button always reads as the primary move. */
-.filters-catalog ul.products li.product .button:not(.add_to_cart_button):not(.added_to_cart) { border: 1px solid var(--aev-border); background: #fff; color: var(--aev-navy); }
-.filters-catalog ul.products li.product .button:not(.add_to_cart_button):not(.added_to_cart):hover { border-color: var(--aev-navy); background: #fff; color: var(--aev-navy); }
-.filters-catalog ul.products li.product .added_to_cart { margin-top: 12px; color: var(--aev-blue); font-size: 14px; font-weight: 700; text-decoration: underline; }
+
 .filters-empty { padding: 30px; border: 1px solid var(--aev-border); border-radius: 18px; background: #fff; color: var(--aev-muted); }
 
 @media (max-width: 900px) {

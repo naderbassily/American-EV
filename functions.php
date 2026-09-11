@@ -278,3 +278,16 @@ add_action( 'template_redirect', 'aev_redirect_miscased_shop', 1 );
 add_filter( 'single_product_archive_thumbnail_size', function () {
 	return 'woocommerce_single';
 } );
+
+/**
+ * Catalog cards send people to the product page to order rather than adding to
+ * the cart inline, so every card carries the same "Order now" link.
+ */
+function aev_loop_order_now_button( $link, $product ) {
+	return sprintf(
+		'<a href="%1$s" class="button aev-order-now">%2$s</a>',
+		esc_url( $product->get_permalink() ),
+		esc_html__( 'Order now', 'american-ev' )
+	);
+}
+add_filter( 'woocommerce_loop_add_to_cart_link', 'aev_loop_order_now_button', 10, 2 );
