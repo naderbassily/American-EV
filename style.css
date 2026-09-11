@@ -350,7 +350,7 @@ body.page-template-page-services .primary-nav > a:first-child, .primary-nav .is-
 .filters-catalog ul.products { margin: 0; }
 .filters-catalog ul.products li.product { padding: 0 0 24px; overflow: hidden; border: 1px solid var(--aev-border); border-radius: 24px; background: #fff; box-shadow: 0 18px 45px rgba(16,35,55,.06); transition: transform .3s ease, box-shadow .3s ease; }
 .filters-catalog ul.products li.product:hover { transform: translateY(-7px); box-shadow: 0 26px 60px rgba(16,35,55,.12); }
-.filters-catalog ul.products li.product a img { width: 100%; height: 260px; margin: 0 0 20px; object-fit: contain; background: #f3f5f6; }
+.filters-catalog ul.products li.product a img { width: 100%; height: 260px; margin: 0 0 20px; object-fit: contain; background: #fff; }
 .filters-catalog ul.products li.product .woocommerce-loop-product__title, .filters-catalog ul.products li.product .price, .filters-catalog ul.products li.product .button { margin-left: 24px; margin-right: 24px; }
 .filters-catalog ul.products li.product .woocommerce-loop-product__title { margin-bottom: 10px; font-size: 20px; }
 .filters-catalog ul.products li.product .price { display: block; margin-bottom: 18px; color: var(--aev-blue); font-weight: 700; }
