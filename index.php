@@ -1,0 +1,3 @@
+<?php get_header(); ?>
+<main class="site-main site-main--inner"><div class="container"><h1><?php bloginfo( 'name' ); ?></h1><div class="posts-grid"><?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?><article <?php post_class( 'post-card' ); ?>><?php if ( has_post_thumbnail() ) : ?><a href="<?php the_permalink(); ?>"><?php the_post_thumbnail( 'large' ); ?></a><?php endif; ?><div class="post-card__body"><h2><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2><?php the_excerpt(); ?></div></article><?php endwhile; else : ?><p><?php esc_html_e( 'No content found.', 'american-ev' ); ?></p><?php endif; ?></div><?php the_posts_pagination(); ?></div></main>
+<?php get_footer(); ?>
