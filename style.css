@@ -397,6 +397,13 @@ body.single-product div.product p.price del { margin-right: 12px; color: var(--a
 body.single-product div.product p.price ins { color: var(--aev-navy); text-decoration: none; }
 body.single-product .woocommerce-product-details__short-description { margin-top: 20px; color: var(--aev-muted); font-size: 17px; line-height: 1.65; }
 
+/* Made in USA badge - explicit placement keeps it in the gallery column,
+   since it is a sibling of the gallery rather than a child of it. */
+body.single-product .product-gallery-col { grid-column: 1; }
+body.single-product div.product div.summary { grid-column: 2; }
+body.single-product .usa-badge { margin: 8px 0 0; padding: 9px 20px; display: inline-flex; align-items: center; gap: 11px; border: 1px solid var(--aev-border); border-radius: 999px; background: #fff; color: var(--aev-navy); font-size: 12.5px; line-height: 1.2; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; }
+body.single-product .usa-badge__flag { width: 26px; height: 18px; flex: 0 0 auto; border-radius: 2.5px; overflow: hidden; box-shadow: 0 0 0 1px rgba(16,35,55,.12); }
+
 /* Kit contents panel */
 body.single-product .kit-panel { margin: 28px 0 0; padding: 26px 28px; display: flex; align-items: center; gap: 28px; border-radius: 18px; background: var(--aev-navy); color: #fff; }
 body.single-product .kit-panel__count { flex: 0 0 auto; padding-right: 28px; border-right: 1px solid rgba(255,255,255,.18); text-align: center; }
@@ -459,6 +466,7 @@ body.single-product div.product section.related ul.products { margin: 0; }
   .process-grid { grid-template-columns: 1fr; }
   .woocommerce ul.products { grid-template-columns: repeat(2, 1fr); }
   body.single-product div.product { grid-template-columns: 1fr; gap: 34px; }
+  body.single-product .product-gallery-col, body.single-product div.product div.summary { grid-column: 1; }
   body.single-product div.product p.price { font-size: 30px; }
   .services-editorial-split, .services-product-split, .sourcing-grid, .featured-filter__grid, .maintenance-editorial__grid, .performance-grid, .service-request__grid { grid-template-columns: 1fr; }
   .services-editorial-split, .services-product-split, .sourcing-grid, .featured-filter__grid, .maintenance-editorial__grid, .performance-grid, .service-request__grid { gap: 50px; }

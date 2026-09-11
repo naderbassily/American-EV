@@ -435,3 +435,49 @@ function aev_product_kit_panel() {
 	<?php
 }
 add_action( 'woocommerce_single_product_summary', 'aev_product_kit_panel', 24 );
+
+/**
+ * "Proudly made in the USA" badge, rendered directly under the product gallery.
+ *
+ * Sits between the gallery and the summary in the DOM; CSS places it in the
+ * left column, second row, so it reads as part of the gallery block.
+ */
+function aev_made_in_usa_badge() {
+	$stripes = '';
+	for ( $i = 0; $i < 7; $i++ ) {
+		$stripes .= sprintf( '<rect y="%s" width="26" height="1.385"/>', round( $i * 2.769, 3 ) );
+	}
+	$stars = '';
+	for ( $row = 0; $row < 4; $row++ ) {
+		for ( $col = 0; $col < 5; $col++ ) {
+			$stars .= sprintf( '<circle cx="%s" cy="%s" r=".4"/>', round( 1.3 + $col * 1.95, 3 ), round( 1.35 + $row * 2.35, 3 ) );
+		}
+	}
+	?>
+	<p class="usa-badge">
+		<svg class="usa-badge__flag" viewBox="0 0 26 18" role="img" aria-label="<?php esc_attr_e( 'Flag of the United States', 'american-ev' ); ?>">
+			<rect width="26" height="18" fill="#fff"/>
+			<g fill="#b22234"><?php echo $stripes; // phpcs:ignore WordPress.Security.EscapeOutput -- generated markup. ?></g>
+			<rect width="10.4" height="9.692" fill="#3c3b6e"/>
+			<g fill="#fff"><?php echo $stars; // phpcs:ignore WordPress.Security.EscapeOutput -- generated markup. ?></g>
+		</svg>
+		<span><?php esc_html_e( 'Proudly made in the USA', 'american-ev' ); ?></span>
+	</p>
+	<?php
+}
+add_action( 'woocommerce_before_single_product_summary', 'aev_made_in_usa_badge', 25 );
+
+/**
+ * Wrap the gallery and the badge in one element so they occupy a single grid
+ * cell. Spanning the summary across two rows instead made the browser grow
+ * row 1 to help fit it, which stranded the badge far below the gallery.
+ *
+ * 19 opens before woocommerce_show_product_images (20); 26 closes after the
+ * badge (25). The sale flash (10) stays outside, positioned off div.product.
+ */
+add_action( 'woocommerce_before_single_product_summary', function () {
+	echo '<div class="product-gallery-col">';
+}, 19 );
+add_action( 'woocommerce_before_single_product_summary', function () {
+	echo '</div>';
+}, 26 );
