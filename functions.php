@@ -336,7 +336,7 @@ function aev_product_benefits() {
 	}
 	echo '</ul>';
 }
-add_action( 'woocommerce_single_product_summary', 'aev_product_benefits', 25 );
+add_action( 'woocommerce_before_single_product_summary', 'aev_product_benefits', 25 );
 
 /**
  * srcset for a bundled theme image that ships in more than one width.
@@ -473,15 +473,14 @@ function aev_made_in_usa_badge() {
 	</p>
 	<?php
 }
-add_action( 'woocommerce_before_single_product_summary', 'aev_made_in_usa_badge', 25 );
+add_action( 'woocommerce_single_product_summary', 'aev_made_in_usa_badge', 4 );
 
 /**
- * Wrap the gallery and the badge in one element so they occupy a single grid
- * cell. Spanning the summary across two rows instead made the browser grow
- * row 1 to help fit it, which stranded the badge far below the gallery.
+ * Wrap the gallery and the benefit row in one element so they occupy a single
+ * grid cell in the left column.
  *
  * 19 opens before woocommerce_show_product_images (20); 26 closes after the
- * badge (25). The sale flash (10) stays outside, positioned off div.product.
+ * benefits (25). The sale flash (10) stays outside, positioned off div.product.
  */
 add_action( 'woocommerce_before_single_product_summary', function () {
 	echo '<div class="product-gallery-col">';
@@ -567,4 +566,13 @@ function aev_product_spec_tables() {
 	}
 	echo '</div>';
 }
-add_action( 'woocommerce_after_single_product_summary', 'aev_product_spec_tables', 11 );
+add_filter( 'woocommerce_product_tabs', function ( $tabs ) {
+	if ( aev_parse_spec_tables( aev_field( 'product_specs', '' ) ) ) {
+		$tabs['specs'] = array(
+			'title'    => __( 'Specs', 'american-ev' ),
+			'priority' => 15,
+			'callback' => 'aev_product_spec_tables',
+		);
+	}
+	return $tabs;
+}, 97 );
