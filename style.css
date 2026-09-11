@@ -542,8 +542,10 @@ body.single-product div.product section.related ul.products { margin: 0; }
 .about-cta__media, .about-cta__media::after { position: absolute; inset: 0; }
 .about-cta__media img { width: 100%; height: 100%; object-fit: cover; object-position: 70% center; opacity: .5; }
 .about-cta__media::after { content: ""; width: 76%; background: linear-gradient(90deg, var(--aev-navy) 6%, rgba(0,31,63,.9) 54%, transparent 100%); }
-.about-cta__content { position: relative; z-index: 2; max-width: 720px; padding-block: clamp(80px, 9vw, 122px); }
-.about-cta .display { font-size: clamp(32px, 3.8vw, 54px); line-height: 1.08; letter-spacing: -.03em; color: #fff; }
+/* No max-width here: .container is margin-inline:auto, so narrowing it
+   re-centres the box instead of keeping it flush with every other section. */
+.about-cta__content { position: relative; z-index: 2; padding-block: clamp(80px, 9vw, 122px); }
+.about-cta .display { max-width: 720px; font-size: clamp(32px, 3.8vw, 54px); line-height: 1.08; letter-spacing: -.03em; color: #fff; }
 .about-cta .lead { max-width: 600px; margin: 24px 0 0; color: #c1cdd8; font-size: clamp(16px, 1.3vw, 18px); }
 .about-cta__actions { margin-top: 34px; display: flex; flex-wrap: wrap; gap: 14px; }
 
