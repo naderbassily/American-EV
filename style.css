@@ -326,7 +326,7 @@ body.page-template-page-services .primary-nav > a:first-child, .primary-nav .is-
 .woocommerce ul.products::before, .woocommerce ul.products::after { display: none; }
 .woocommerce span.onsale { min-width: auto; min-height: auto; padding: 5px 10px; border-radius: 999px; background: var(--aev-green); line-height: 1.4; }
 .woocommerce a.button, .woocommerce button.button, .woocommerce input.button, .woocommerce a.button.alt, .woocommerce button.button.alt, .woocommerce input.button.alt, .woocommerce #respond input#submit { border-radius: 999px; background: var(--aev-green); color: var(--aev-navy); }
-.woocommerce a.button:hover, .woocommerce button.button:hover, .woocommerce input.button:hover, .woocommerce a.button.alt:hover, .woocommerce button.button.alt:hover, .woocommerce input.button.alt:hover, .woocommerce #respond input#submit:hover { background: var(--aev-blue); color: #fff; }
+.woocommerce a.button:hover, .woocommerce button.button:hover, .woocommerce input.button:hover, .woocommerce a.button.alt:hover, .woocommerce button.button.alt:hover, .woocommerce input.button.alt:hover, .woocommerce #respond input#submit:hover { background: var(--aev-navy); color: #fff; }
 .woocommerce div.product p.price, .woocommerce div.product span.price, .woocommerce ul.products li.product .price { color: var(--aev-navy); }
 .woocommerce form .form-row input.input-text, .woocommerce form .form-row textarea, .select2-container--default .select2-selection--single { padding: 12px; border: 1px solid #cfd6dd; border-radius: 10px; }
 .woocommerce .quantity .qty { min-height: 44px; border: 1px solid #cfd6dd; border-radius: 8px; }
