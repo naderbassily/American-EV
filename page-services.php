@@ -12,7 +12,7 @@ $phone = aev_field( 'contact_phone', '404-309-4880' );
 ?>
 <main class="site-main services-page">
 	<section class="services-hero" id="top">
-		<div class="services-hero__media"><img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/services-hero-maintenance.png' ); ?>" alt="<?php esc_attr_e( 'Technician servicing commercial EV charging equipment', 'american-ev' ); ?>"></div>
+		<div class="services-hero__media"><img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/services-hero-maintenance.webp' ); ?>" srcset="<?php echo esc_url( get_template_directory_uri() . '/assets/images/services-hero-maintenance-900.webp' ); ?> 900w, <?php echo esc_url( get_template_directory_uri() . '/assets/images/services-hero-maintenance.webp' ); ?> 1536w" sizes="100vw" width="1536" height="1024" alt="<?php esc_attr_e( 'Technician servicing commercial EV charging equipment', 'american-ev' ); ?>"></div>
 		<div class="container services-hero__content">
 			<div class="services-hero__copy">
 				<p class="eyebrow">EV Charging Services</p>
@@ -38,7 +38,7 @@ $phone = aev_field( 'contact_phone', '404-309-4880' );
 
 	<section class="section services-parts" id="replacement-parts">
 		<div class="container services-product-split" data-reveal>
-			<div class="services-parts-image"><video autoplay muted loop playsinline preload="metadata" poster="<?php echo esc_url( get_template_directory_uri() . '/assets/images/replacement-filters.png' ); ?>" aria-label="Commercial EV charging equipment components"><source src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/replacement-components.mp4' ); ?>" type="video/mp4"><img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/replacement-filters.png' ); ?>" alt="<?php esc_attr_e( 'Replacement air filters for commercial EV charging equipment', 'american-ev' ); ?>"></video></div>
+			<div class="services-parts-image"><video autoplay muted loop playsinline preload="metadata" poster="<?php echo esc_url( get_template_directory_uri() . '/assets/images/replacement-filters.webp' ); ?>" aria-label="Commercial EV charging equipment components"><source src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/replacement-components.mp4' ); ?>" type="video/mp4"><img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/replacement-filters.webp' ); ?>" width="800" height="800" loading="lazy" alt="<?php esc_attr_e( 'Replacement air filters for commercial EV charging equipment', 'american-ev' ); ?>"></video></div>
 			<div class="services-detail-copy">
 				<p class="eyebrow eyebrow--blue">Replacement Parts</p>
 				<h2 class="section-title"><?php echo wp_kses_post( nl2br( esc_html( aev_field( 'services_parts_title', "The right component\nwhen you need it." ) ) ) ); ?></h2>
@@ -61,7 +61,7 @@ $phone = aev_field( 'contact_phone', '404-309-4880' );
 	<section class="section featured-filter" id="featured-component">
 		<div class="container featured-filter__grid" data-reveal>
 			<div class="featured-filter__copy"><p class="eyebrow eyebrow--blue">Featured Component</p><h2 class="section-title"><?php echo wp_kses_post( nl2br( esc_html( aev_field( 'services_featured_title', "Replacement filters\nfor commercial charging equipment." ) ) ) ); ?></h2><p class="lead"><?php echo esc_html( aev_field( 'services_featured_body', 'Cooling and airflow components can play an important role in maintaining proper operating conditions inside commercial charging equipment.' ) ); ?></p><p>American EV Solutions is developing its parts offering around replacement components that maintenance teams may otherwise have difficulty sourcing.</p><a class="text-link" href="<?php echo esc_url( class_exists( 'WooCommerce' ) ? wc_get_page_permalink( 'shop' ) : '#service-request' ); ?>">Order Now</a></div>
-			<div class="featured-filter__image"><img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/replacement-filters.png' ); ?>" alt="<?php esc_attr_e( 'Replacement air filters for commercial EV charging equipment', 'american-ev' ); ?>"></div>
+			<div class="featured-filter__image"><img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/replacement-filters.webp' ); ?>" width="800" height="800" loading="lazy" alt="<?php esc_attr_e( 'Replacement air filters for commercial EV charging equipment', 'american-ev' ); ?>"></div>
 		</div>
 	</section>
 

@@ -1,11 +1,14 @@
 <?php
 get_header();
+$hero_image  = aev_image_url( 'hero_image', '/assets/images/commercial-charging-hero.webp' );
+$parts_image = aev_image_url( 'parts_image', '/assets/images/commercial-charging-hero.webp' );
+$hero_srcset = array( 900 => 'commercial-charging-hero-900.webp', 1600 => 'commercial-charging-hero.webp' );
 $email = aev_field( 'contact_email', 'info@americanevsolutions.com' );
 $phone = aev_field( 'contact_phone', '404-309-4880' );
 ?>
 <main class="site-main">
 	<section class="hero" id="top">
-		<div class="hero-media"><img src="<?php echo aev_image_url( 'hero_image', '/assets/images/commercial-charging-hero.png' ); ?>" alt="<?php esc_attr_e( 'Commercial EV charging depot', 'american-ev' ); ?>"></div>
+		<div class="hero-media"><img src="<?php echo $hero_image; // phpcs:ignore WordPress.Security.EscapeOutput -- escaped in aev_image_url(). ?>"<?php echo aev_theme_image_srcset( 'commercial-charging-hero', $hero_image, $hero_srcset ); // phpcs:ignore WordPress.Security.EscapeOutput ?> sizes="100vw" width="1600" height="667" alt="<?php esc_attr_e( 'Commercial EV charging depot', 'american-ev' ); ?>"></div>
 		<div class="container hero-content">
 			<div class="hero-copy">
 				<p class="eyebrow"><?php echo esc_html( aev_field( 'hero_eyebrow', 'Commercial EV Charging Support' ) ); ?></p>
@@ -25,7 +28,7 @@ $phone = aev_field( 'contact_phone', '404-309-4880' );
 	</div></section>
 
 	<section class="section parts" id="parts"><div class="container split" data-reveal>
-		<div class="service-image"><img src="<?php echo aev_image_url( 'parts_image', '/assets/images/commercial-charging-hero.png' ); ?>" alt="<?php esc_attr_e( 'Commercial charging hardware', 'american-ev' ); ?>"></div>
+		<div class="service-image"><img src="<?php echo $parts_image; // phpcs:ignore WordPress.Security.EscapeOutput -- escaped in aev_image_url(). ?>"<?php echo aev_theme_image_srcset( 'commercial-charging-hero', $parts_image, $hero_srcset ); // phpcs:ignore WordPress.Security.EscapeOutput ?> sizes="(max-width: 900px) 100vw, 45vw" width="1600" height="667" loading="lazy" alt="<?php esc_attr_e( 'Commercial charging hardware', 'american-ev' ); ?>"></div>
 		<div class="service-copy"><p class="eyebrow eyebrow--blue">Parts</p><h2 class="section-title"><?php echo wp_kses_post( nl2br( esc_html( aev_field( 'parts_title', "The right part.\nBack in service." ) ) ) ); ?></h2><p class="lead"><?php echo esc_html( aev_field( 'parts_body', 'Replacement components selected for your commercial charging equipment, helping your team restore service with confidence.' ) ); ?></p><ul class="check-list"><li>Filters and cooling components</li><li>Cables and heavy-duty connectors</li><li>Internal charging components</li></ul><?php if ( class_exists( 'WooCommerce' ) ) : ?><a class="text-link" href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>">Explore parts</a><?php else : ?><a class="text-link" href="#contact">Explore parts</a><?php endif; ?></div>
 	</div></section>
 

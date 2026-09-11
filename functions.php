@@ -337,3 +337,25 @@ function aev_product_benefits() {
 	echo '</ul>';
 }
 add_action( 'woocommerce_single_product_summary', 'aev_product_benefits', 25 );
+
+/**
+ * srcset for a bundled theme image that ships in more than one width.
+ *
+ * Returns an empty string when $current_url is not the bundled file - an ACF
+ * upload will have replaced it, and those carry their own sizes.
+ *
+ * @param string $base        File name without extension, e.g. 'hero'.
+ * @param string $current_url URL actually being rendered (already escaped).
+ * @param array  $sources     width => filename, e.g. array( 900 => 'hero-900.webp' ).
+ */
+function aev_theme_image_srcset( $base, $current_url, $sources ) {
+	$dir = get_template_directory_uri() . '/assets/images/';
+	if ( $current_url !== esc_url( $dir . $base . '.webp' ) ) {
+		return '';
+	}
+	$set = array();
+	foreach ( $sources as $width => $file ) {
+		$set[] = esc_url( $dir . $file ) . ' ' . (int) $width . 'w';
+	}
+	return ' srcset="' . esc_attr( implode( ', ', $set ) ) . '"';
+}
