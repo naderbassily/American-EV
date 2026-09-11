@@ -270,3 +270,11 @@ function aev_redirect_miscased_shop() {
 	}
 }
 add_action( 'template_redirect', 'aev_redirect_miscased_shop', 1 );
+
+/**
+ * The shop grid cards are wider than WooCommerce's 300px catalog thumbnail, so
+ * serve the larger single-product size and let CSS scale it down.
+ */
+add_filter( 'single_product_archive_thumbnail_size', function () {
+	return 'woocommerce_single';
+} );
