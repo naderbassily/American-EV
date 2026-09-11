@@ -405,7 +405,7 @@ body.single-product .usa-badge { margin: 0 0 18px; padding: 9px 20px; display: i
 body.single-product .usa-badge__flag { width: 26px; height: 18px; flex: 0 0 auto; border-radius: 2.5px; overflow: hidden; box-shadow: 0 0 0 1px rgba(16,35,55,.12); }
 
 /* Kit contents panel */
-body.single-product .kit-panel { margin: 28px 0 0; padding: 26px 28px; display: flex; align-items: center; gap: 28px; border-radius: 18px; background: var(--aev-navy); color: #fff; }
+body.single-product .kit-panel { margin: 22px 0 0; padding: 26px 28px; display: flex; align-items: center; gap: 28px; border-radius: 18px; background: var(--aev-navy); color: #fff; }
 body.single-product .kit-panel__count { flex: 0 0 auto; padding-right: 28px; border-right: 1px solid rgba(255,255,255,.18); text-align: center; }
 body.single-product .kit-panel__number { display: block; color: var(--aev-green); font-size: 58px; line-height: .95; font-weight: 700; letter-spacing: -.04em; }
 body.single-product .kit-panel__label { display: block; max-width: 7ch; margin: 8px auto 0; font-size: 12px; line-height: 1.25; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
@@ -415,7 +415,7 @@ body.single-product .kit-panel__check { flex: 0 0 auto; width: 17px; height: 17p
 
 /* Benefit row under the short description */
 /* 2x2 with cross rules between the cells, echoing the product flyer. */
-body.single-product .product-benefits { margin: 26px 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; border-top: 1px solid var(--aev-border); list-style: none; }
+body.single-product .product-benefits { margin: 28px 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; border-top: 1px solid var(--aev-border); list-style: none; }
 body.single-product .product-benefits__item { padding: 24px 24px 24px 0; display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
 body.single-product .product-benefits__item:nth-child(even) { padding-right: 0; padding-left: 24px; border-left: 1px solid var(--aev-border); }
 body.single-product .product-benefits__item:nth-child(n+3) { border-top: 1px solid var(--aev-border); }

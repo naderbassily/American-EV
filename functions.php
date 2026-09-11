@@ -336,7 +336,7 @@ function aev_product_benefits() {
 	}
 	echo '</ul>';
 }
-add_action( 'woocommerce_before_single_product_summary', 'aev_product_benefits', 25 );
+add_action( 'woocommerce_single_product_summary', 'aev_product_benefits', 24 );
 
 /**
  * srcset for a bundled theme image that ships in more than one width.
@@ -442,7 +442,7 @@ function aev_product_kit_panel() {
 	</div>
 	<?php
 }
-add_action( 'woocommerce_single_product_summary', 'aev_product_kit_panel', 24 );
+add_action( 'woocommerce_before_single_product_summary', 'aev_product_kit_panel', 25 );
 
 /**
  * "Proudly made in the USA" badge, rendered directly under the product gallery.
@@ -476,11 +476,11 @@ function aev_made_in_usa_badge() {
 add_action( 'woocommerce_single_product_summary', 'aev_made_in_usa_badge', 4 );
 
 /**
- * Wrap the gallery and the benefit row in one element so they occupy a single
+ * Wrap the gallery and the kit panel in one element so they occupy a single
  * grid cell in the left column.
  *
  * 19 opens before woocommerce_show_product_images (20); 26 closes after the
- * benefits (25). The sale flash (10) stays outside, positioned off div.product.
+ * kit panel (25). The sale flash (10) stays outside, positioned off div.product.
  */
 add_action( 'woocommerce_before_single_product_summary', function () {
 	echo '<div class="product-gallery-col">';
