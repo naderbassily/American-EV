@@ -7,7 +7,6 @@
 					<p class="eyebrow">Replacement Parts</p>
 					<h1 class="display">Filters that keep every charge moving.</h1>
 					<p class="lead">Replacement air filters and service components for commercial EV charging equipment.</p>
-					<a class="btn" href="#filter-products">Browse Filters</a>
 				</div>
 				<div class="filters-hero__visual" data-reveal><img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/replacement-filters.png' ); ?>" alt="Replacement filters for commercial EV charging equipment"></div>
 			</div>
