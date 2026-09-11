@@ -11,7 +11,7 @@ $hero_image    = aev_image_url( 'about_hero_image', '/assets/images/services-her
 $who_image     = aev_image_url( 'about_who_image', '/assets/images/commercial-charging-hero.webp' );
 $why_image     = aev_image_url( 'about_why_image', '/assets/images/replacement-filters.webp' );
 $support_image = aev_image_url( 'about_support_image', '/assets/images/commercial-charging-hero.webp' );
-$cta_image     = aev_image_url( 'about_cta_image', '/assets/images/commercial-charging-hero.webp' );
+$cta_image     = aev_image_url( 'about_cta_image', '/assets/images/about-cta-plaza.webp' );
 $shop_url      = class_exists( 'WooCommerce' ) ? wc_get_page_permalink( 'shop' ) : aev_home_anchor( 'contact' );
 ?>
 <main class="site-main about-page">
@@ -197,7 +197,7 @@ $shop_url      = class_exists( 'WooCommerce' ) ? wc_get_page_permalink( 'shop' )
 
 	<section class="about-cta" id="about-contact">
 		<div class="about-cta__media" aria-hidden="true">
-			<img src="<?php echo $cta_image; // phpcs:ignore WordPress.Security.EscapeOutput -- escaped in aev_image_url(). ?>" loading="lazy" alt="">
+			<img src="<?php echo $cta_image; // phpcs:ignore WordPress.Security.EscapeOutput -- escaped in aev_image_url(). ?>"<?php echo aev_theme_image_srcset( 'about-cta-plaza', $cta_image, array( 1100 => 'about-cta-plaza-1100.webp', 1920 => 'about-cta-plaza.webp' ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?> sizes="100vw" width="1920" height="900" loading="lazy" alt="">
 		</div>
 		<div class="container about-cta__content" data-reveal>
 			<p class="eyebrow"><?php esc_html_e( "Let's Talk", 'american-ev' ); ?></p>
