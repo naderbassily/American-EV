@@ -359,3 +359,79 @@ function aev_theme_image_srcset( $base, $current_url, $sources ) {
 	}
 	return ' srcset="' . esc_attr( implode( ', ', $set ) ) . '"';
 }
+
+/**
+ * Per-product "kit contents" panel fields.
+ */
+function aev_product_acf_fields() {
+	if ( ! function_exists( 'acf_add_local_field_group' ) ) {
+		return;
+	}
+	acf_add_local_field_group( array(
+		'key'    => 'group_aev_product_kit',
+		'title'  => 'Kit Contents Panel',
+		'fields' => array(
+			array(
+				'key'          => 'field_aev_kit_quantity',
+				'label'        => 'Quantity',
+				'name'         => 'kit_quantity',
+				'type'         => 'number',
+				'min'          => 1,
+				'instructions' => 'Number shown in the navy panel, e.g. 7. Leave empty to hide the panel entirely.',
+			),
+			array(
+				'key'           => 'field_aev_kit_quantity_label',
+				'label'         => 'Quantity Label',
+				'name'          => 'kit_quantity_label',
+				'type'          => 'text',
+				'default_value' => 'Filters included',
+				'instructions'  => 'Sits under the number, e.g. "Filters included".',
+			),
+			array(
+				'key'           => 'field_aev_kit_highlights',
+				'label'         => 'Highlights',
+				'name'          => 'kit_highlights',
+				'type'          => 'textarea',
+				'rows'          => 4,
+				'default_value' => "Supports proper airflow\nHelps maintain performance\nPreventive maintenance kit",
+				'instructions'  => 'One checkmark line per row.',
+			),
+		),
+		'location'        => array( array( array( 'param' => 'post_type', 'operator' => '==', 'value' => 'product' ) ) ),
+		'position'        => 'normal',
+		'label_placement' => 'top',
+		'active'          => true,
+	) );
+}
+add_action( 'acf/init', 'aev_product_acf_fields' );
+
+/**
+ * Navy kit panel: quantity beside a checklist. Renders only when the product
+ * carries a quantity, so products without kit data simply skip it.
+ */
+function aev_product_kit_panel() {
+	$quantity = aev_field( 'kit_quantity' );
+	if ( '' === $quantity || null === $quantity || ! is_numeric( $quantity ) ) {
+		return;
+	}
+	$label      = aev_field( 'kit_quantity_label', __( 'Filters included', 'american-ev' ) );
+	// ACF only applies default_value in the admin form for new posts, so the
+	// theme carries its own fallbacks - same pattern as the homepage fields.
+	$highlights = array_filter( array_map( 'trim', preg_split( '/\r\n|\r|\n/', (string) aev_field( 'kit_highlights', "Supports proper airflow\nHelps maintain performance\nPreventive maintenance kit" ) ) ) );
+	?>
+	<div class="kit-panel">
+		<div class="kit-panel__count">
+			<span class="kit-panel__number"><?php echo esc_html( $quantity ); ?></span>
+			<span class="kit-panel__label"><?php echo esc_html( $label ); ?></span>
+		</div>
+		<?php if ( $highlights ) : ?>
+			<ul class="kit-panel__list">
+				<?php foreach ( $highlights as $highlight ) : ?>
+					<li><svg class="kit-panel__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m4 12.5 5.2 5.2L20 6.8"/></svg><span><?php echo esc_html( $highlight ); ?></span></li>
+				<?php endforeach; ?>
+			</ul>
+		<?php endif; ?>
+	</div>
+	<?php
+}
+add_action( 'woocommerce_single_product_summary', 'aev_product_kit_panel', 24 );
