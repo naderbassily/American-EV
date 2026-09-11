@@ -386,7 +386,7 @@ body.single-product div.product { position: relative; display: grid; grid-templa
 body.single-product div.product > span.onsale { position: absolute; top: 20px; left: 20px; right: auto; z-index: 2; min-width: 0; min-height: 0; margin: 0; padding: 7px 15px; border-radius: 999px; background: var(--aev-green); color: #fff; font-size: 11px; font-weight: 700; line-height: 1.2; letter-spacing: .12em; text-transform: uppercase; }
 
 /* Gallery sits in the same white bay as the catalog cards. */
-body.single-product div.product div.images.woocommerce-product-gallery { position: sticky; top: 104px; width: auto !important; float: none !important; margin: 0 !important; padding: clamp(14px, 1.6vw, 22px); border: 1px solid var(--aev-border); border-radius: 24px; background: #fff; box-shadow: 0 1px 2px rgba(16,35,55,.05); }
+body.single-product div.product div.images { width: auto !important; float: none !important; margin: 0 !important; padding: clamp(14px, 1.6vw, 22px); border: 1px solid var(--aev-border); border-radius: 24px; background: #fff; box-shadow: 0 1px 2px rgba(16,35,55,.05); }
 body.single-product div.product div.images img { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: contain; }
 body.single-product div.product .woocommerce-product-gallery__trigger { top: 18px; right: 18px; }
 
@@ -450,7 +450,6 @@ body.single-product div.product section.related ul.products { margin: 0; }
   .process-grid { grid-template-columns: 1fr; }
   .woocommerce ul.products { grid-template-columns: repeat(2, 1fr); }
   body.single-product div.product { grid-template-columns: 1fr; gap: 34px; }
-  body.single-product div.product div.images.woocommerce-product-gallery { position: relative; top: auto; }
   body.single-product div.product p.price { font-size: 30px; }
   .services-editorial-split, .services-product-split, .sourcing-grid, .featured-filter__grid, .maintenance-editorial__grid, .performance-grid, .service-request__grid { grid-template-columns: 1fr; }
   .services-editorial-split, .services-product-split, .sourcing-grid, .featured-filter__grid, .maintenance-editorial__grid, .performance-grid, .service-request__grid { gap: 50px; }
