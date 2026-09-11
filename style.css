@@ -347,14 +347,39 @@ body.page-template-page-services .primary-nav > a:first-child, .primary-nav .is-
 .filters-catalog__intro { max-width: 680px; margin-bottom: 30px; }
 .filters-catalog__intro .lead { margin-top: 22px; }
 .filters-catalog .woocommerce-result-count, .filters-catalog .woocommerce-ordering { display: none; }
-.filters-catalog ul.products { margin: 0; }
-.filters-catalog ul.products li.product { padding: 0 0 24px; overflow: hidden; border: 1px solid var(--aev-border); border-radius: 24px; background: #fff; box-shadow: 0 18px 45px rgba(16,35,55,.06); transition: transform .3s ease, box-shadow .3s ease; }
-.filters-catalog ul.products li.product:hover { transform: translateY(-7px); box-shadow: 0 26px 60px rgba(16,35,55,.12); }
-.filters-catalog ul.products li.product a img { width: 100%; height: 260px; margin: 0 0 20px; object-fit: contain; background: #fff; }
-.filters-catalog ul.products li.product .woocommerce-loop-product__title, .filters-catalog ul.products li.product .price, .filters-catalog ul.products li.product .button { margin-left: 24px; margin-right: 24px; }
-.filters-catalog ul.products li.product .woocommerce-loop-product__title { margin-bottom: 10px; font-size: 20px; }
-.filters-catalog ul.products li.product .price { display: block; margin-bottom: 18px; color: var(--aev-blue); font-weight: 700; }
-.filters-catalog ul.products li.product .button { display: inline-block; }
+.filters-catalog ul.products { margin: 0; gap: 28px; }
+
+/* Card shell: flex column so every CTA lands on the same baseline regardless
+   of title length or whether the product carries a price. */
+.filters-catalog ul.products li.product { position: relative; display: flex; flex-direction: column; padding: 0 0 26px; overflow: hidden; border: 1px solid var(--aev-border); border-radius: 20px; background: #fff; box-shadow: 0 1px 2px rgba(16,35,55,.05); transition: transform .35s cubic-bezier(.2,.7,.3,1), box-shadow .35s ease, border-color .35s ease; }
+.filters-catalog ul.products li.product::before { content: ""; position: absolute; top: 0; left: 0; z-index: 3; width: 100%; height: 3px; background: linear-gradient(90deg, var(--aev-green), var(--aev-blue)); transform: scaleX(0); transform-origin: left; transition: transform .45s cubic-bezier(.2,.7,.3,1); }
+.filters-catalog ul.products li.product:hover { transform: translateY(-6px); border-color: #cad4de; box-shadow: 0 24px 52px rgba(16,35,55,.13); }
+.filters-catalog ul.products li.product:hover::before { transform: scaleX(1); }
+.filters-catalog ul.products li.product > a.woocommerce-loop-product__link { display: flex; flex: 1; flex-direction: column; }
+
+/* Product bay: white, generous, hairline-separated from the copy. */
+.filters-catalog ul.products li.product a img { width: 100%; height: 230px; margin: 0 0 22px; padding: 26px 30px; object-fit: contain; border-bottom: 1px solid var(--aev-border); background: #fff; }
+
+.filters-catalog ul.products li.product span.onsale { position: absolute; top: 18px; left: 18px; right: auto; z-index: 2; min-width: 0; min-height: 0; margin: 0; padding: 6px 13px; border-radius: 999px; background: var(--aev-green); color: #fff; font-size: 11px; font-weight: 700; line-height: 1.2; letter-spacing: .12em; text-transform: uppercase; }
+
+.filters-catalog ul.products li.product .woocommerce-loop-product__title, .filters-catalog ul.products li.product .price, .filters-catalog ul.products li.product .button { margin-left: 26px; margin-right: 26px; }
+.filters-catalog ul.products li.product .woocommerce-loop-product__title { margin-bottom: 16px; color: var(--aev-navy); font-size: 19px; line-height: 1.32; font-weight: 700; letter-spacing: -.015em; }
+/* No price rendered means the title is the link's last child - drop it to the
+   bottom so the card does not open a void above the CTA. */
+.filters-catalog ul.products li.product .woocommerce-loop-product__title:last-child { margin-top: auto; margin-bottom: 22px; }
+
+/* Price sits on the bottom edge of the link so it aligns card to card. */
+.filters-catalog ul.products li.product .price { display: block; margin-top: auto; margin-bottom: 22px; color: var(--aev-navy); font-size: 23px; line-height: 1.2; font-weight: 700; letter-spacing: -.02em; }
+.filters-catalog ul.products li.product .price del { margin-right: 9px; color: var(--aev-muted); font-size: 15px; font-weight: 500; opacity: 1; }
+.filters-catalog ul.products li.product .price ins { color: var(--aev-blue); text-decoration: none; }
+
+.filters-catalog ul.products li.product .button { display: inline-flex; align-items: center; justify-content: center; align-self: start; min-height: 46px; padding: 12px 26px; border-radius: 999px; font-size: 15px; font-weight: 700; letter-spacing: .005em; transition: transform .25s ease, background .25s ease, color .25s ease, border-color .25s ease; }
+.filters-catalog ul.products li.product .button:hover { transform: translateY(-2px); }
+/* Products with no price render "Read more" instead of a cart action - keep it
+   visually secondary so a real buy button always reads as the primary move. */
+.filters-catalog ul.products li.product .button:not(.add_to_cart_button):not(.added_to_cart) { border: 1px solid var(--aev-border); background: #fff; color: var(--aev-navy); }
+.filters-catalog ul.products li.product .button:not(.add_to_cart_button):not(.added_to_cart):hover { border-color: var(--aev-navy); background: #fff; color: var(--aev-navy); }
+.filters-catalog ul.products li.product .added_to_cart { margin-top: 12px; color: var(--aev-blue); font-size: 14px; font-weight: 700; text-decoration: underline; }
 .filters-empty { padding: 30px; border: 1px solid var(--aev-border); border-radius: 18px; background: #fff; color: var(--aev-muted); }
 
 @media (max-width: 900px) {
