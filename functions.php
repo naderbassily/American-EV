@@ -388,6 +388,14 @@ function aev_product_acf_fields() {
 				'instructions'  => 'Sits under the number, e.g. "Filters included".',
 			),
 			array(
+				'key'          => 'field_aev_product_specs',
+				'label'        => 'Spec Tables',
+				'name'         => 'product_specs',
+				'type'         => 'textarea',
+				'rows'         => 14,
+				'instructions' => 'One card per block, blank line between cards. First line is the heading, with an optional (Type). Then one "Label: Value" per line.',
+			),
+			array(
 				'key'           => 'field_aev_kit_highlights',
 				'label'         => 'Highlights',
 				'name'          => 'kit_highlights',
@@ -481,3 +489,82 @@ add_action( 'woocommerce_before_single_product_summary', function () {
 add_action( 'woocommerce_before_single_product_summary', function () {
 	echo '</div>';
 }, 26 );
+
+/**
+ * Drop the Reviews tab from product pages, leaving Description on its own.
+ */
+add_filter( 'woocommerce_product_tabs', function ( $tabs ) {
+	unset( $tabs['reviews'] );
+	return $tabs;
+}, 98 );
+
+/**
+ * Spec tables beside the description.
+ *
+ * ACF free has no Repeater field, so the data lives in one textarea with a
+ * plain-text shape the client can edit without markup:
+ *
+ *   Outlet Filter (Rectangular)
+ *   Dimensions: 20" x 8"
+ *   Quantity: 3 filters
+ *
+ *   Inlet Filter (Rectangular)
+ *   Dimensions: 20" x 14"
+ *
+ * A blank line starts a new card. The first line is the card heading, with an
+ * optional parenthetical shown alongside it. Every later "Label: Value" line
+ * becomes a row; anything without a colon is skipped.
+ */
+function aev_parse_spec_tables( $raw ) {
+	$cards = array();
+	foreach ( preg_split( '/\R\s*\R/', trim( (string) $raw ) ) as $block ) {
+		$lines = array_values( array_filter( array_map( 'trim', preg_split( '/\R/', $block ) ) ) );
+		if ( ! $lines ) {
+			continue;
+		}
+		$heading = array_shift( $lines );
+		$type    = '';
+		if ( preg_match( '/^(.*?)\s*\(([^)]*)\)$/', $heading, $matches ) ) {
+			$heading = trim( $matches[1] );
+			$type    = trim( $matches[2] );
+		}
+		$rows = array();
+		foreach ( $lines as $line ) {
+			$parts = explode( ':', $line, 2 );
+			if ( 2 === count( $parts ) && '' !== trim( $parts[0] ) ) {
+				$rows[] = array( trim( $parts[0] ), trim( $parts[1] ) );
+			}
+		}
+		if ( $rows ) {
+			$cards[] = array( 'heading' => $heading, 'type' => $type, 'rows' => $rows );
+		}
+	}
+	return $cards;
+}
+
+function aev_product_spec_tables() {
+	$cards = aev_parse_spec_tables( aev_field( 'product_specs', '' ) );
+	if ( ! $cards ) {
+		return;
+	}
+	echo '<div class="product-specs">';
+	foreach ( $cards as $card ) {
+		?>
+		<table class="spec-card">
+			<caption class="spec-card__head">
+				<span class="spec-card__head-inner">
+					<span class="spec-card__title"><?php echo esc_html( $card['heading'] ); ?></span>
+					<?php if ( $card['type'] ) : ?><span class="spec-card__type"><?php echo esc_html( $card['type'] ); ?></span><?php endif; ?>
+				</span>
+			</caption>
+			<tbody>
+				<?php foreach ( $card['rows'] as $row ) : ?>
+					<tr><th scope="row"><?php echo esc_html( $row[0] ); ?></th><td><?php echo esc_html( $row[1] ); ?></td></tr>
+				<?php endforeach; ?>
+			</tbody>
+		</table>
+		<?php
+	}
+	echo '</div>';
+}
+add_action( 'woocommerce_after_single_product_summary', 'aev_product_spec_tables', 11 );

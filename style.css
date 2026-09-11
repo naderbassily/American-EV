@@ -432,20 +432,39 @@ body.single-product .stock { margin: 16px 0 0; color: var(--aev-green); font-siz
 body.single-product .stock.out-of-stock { color: #b4453c; }
 
 /* Tabs: underline bar instead of WooCommerce's default bordered folder tabs. */
-body.single-product div.product .woocommerce-tabs { grid-column: 1 / -1; margin-top: clamp(56px, 6vw, 84px); }
+body.single-product div.product .woocommerce-tabs { grid-column: 1; margin-top: clamp(56px, 6vw, 84px); }
 body.single-product div.product .woocommerce-tabs ul.tabs { margin: 0 0 34px; padding: 0; display: flex; flex-wrap: wrap; gap: 30px; border-bottom: 1px solid var(--aev-border); }
 body.single-product div.product .woocommerce-tabs ul.tabs::before, body.single-product div.product .woocommerce-tabs ul.tabs::after, body.single-product div.product .woocommerce-tabs ul.tabs li::before, body.single-product div.product .woocommerce-tabs ul.tabs li::after { display: none; }
 body.single-product div.product .woocommerce-tabs ul.tabs li { margin: 0; padding: 0; border: 0; border-radius: 0; background: transparent; }
 body.single-product div.product .woocommerce-tabs ul.tabs li a { display: block; padding: 0 0 16px; border-bottom: 3px solid transparent; color: var(--aev-muted); font-size: 13px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; transition: color .25s ease, border-color .25s ease; }
 body.single-product div.product .woocommerce-tabs ul.tabs li a:hover { color: var(--aev-navy); }
 body.single-product div.product .woocommerce-tabs ul.tabs li.active a { color: var(--aev-navy); border-bottom-color: var(--aev-green); }
-body.single-product div.product .woocommerce-Tabs-panel { max-width: 760px; color: var(--aev-muted); font-size: 17px; line-height: 1.7; }
+body.single-product div.product .woocommerce-Tabs-panel { color: var(--aev-muted); font-size: 16px; line-height: 1.7; }
 body.single-product div.product .woocommerce-Tabs-panel > h2 { margin: 0 0 20px; color: var(--aev-navy); font-size: clamp(26px, 2.4vw, 34px); line-height: 1.15; letter-spacing: -.03em; }
 /* The tab label already says "Description" - no need to repeat it as a heading. */
 body.single-product div.product .woocommerce-Tabs-panel--description > h2 { display: none; }
 body.single-product div.product .woocommerce-Tabs-panel strong { color: var(--aev-navy); }
 body.single-product div.product .woocommerce-Tabs-panel ul { padding-left: 20px; }
 body.single-product div.product .woocommerce-Tabs-panel li { margin-bottom: 8px; }
+
+/* Spec tables, sat beside the description */
+body.single-product div.product .product-specs { grid-column: 2; display: grid; align-content: start; gap: 20px; margin-top: clamp(56px, 6vw, 84px); }
+/* Without spec data the tabs take the full width again. */
+body.single-product div.product:not(:has(.product-specs)) .woocommerce-tabs { grid-column: 1 / -1; }
+body.single-product .spec-card { width: 100%; border-collapse: collapse; border: 1px solid var(--aev-border); border-radius: 14px; background: #fff; overflow: hidden; }
+/* A caption set to flex shrinks to its content, so the bar stops short of
+   the table edge - keep it table-caption and flex an inner span. */
+body.single-product .spec-card__head { padding: 14px 18px; border-bottom: 1px solid var(--aev-border); background: var(--aev-surface); text-align: left; }
+body.single-product .spec-card__head-inner { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 12px; }
+body.single-product .spec-card__title { color: var(--aev-navy); font-size: 15px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+body.single-product .spec-card__type { color: var(--aev-muted); font-size: 11px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; }
+body.single-product .spec-card__type::before { content: "("; }
+body.single-product .spec-card__type::after { content: ")"; }
+body.single-product .spec-card th, body.single-product .spec-card td { padding: 11px 18px; border-top: 1px solid #eceff2; font-size: 14px; line-height: 1.4; text-align: left; vertical-align: top; }
+body.single-product .spec-card tr:first-child th, body.single-product .spec-card tr:first-child td { border-top: 0; }
+body.single-product .spec-card th { width: 42%; color: var(--aev-muted); font-weight: 500; }
+body.single-product .spec-card td { color: var(--aev-navy); font-weight: 500; }
+body.single-product .spec-card tr:first-child td { font-weight: 700; }
 
 /* Related */
 body.single-product div.product section.related { grid-column: 1 / -1; margin-top: clamp(64px, 7vw, 96px); padding: clamp(56px, 6vw, 80px) 0 clamp(70px, 7vw, 96px); border-top: 1px solid var(--aev-border); }
@@ -467,6 +486,8 @@ body.single-product div.product section.related ul.products { margin: 0; }
   .woocommerce ul.products { grid-template-columns: repeat(2, 1fr); }
   body.single-product div.product { grid-template-columns: 1fr; gap: 34px; }
   body.single-product .product-gallery-col, body.single-product div.product div.summary { grid-column: 1; }
+  body.single-product div.product .woocommerce-tabs, body.single-product div.product .product-specs { grid-column: 1; }
+  body.single-product div.product .product-specs { margin-top: 40px; }
   body.single-product div.product p.price { font-size: 30px; }
   .services-editorial-split, .services-product-split, .sourcing-grid, .featured-filter__grid, .maintenance-editorial__grid, .performance-grid, .service-request__grid { grid-template-columns: 1fr; }
   .services-editorial-split, .services-product-split, .sourcing-grid, .featured-filter__grid, .maintenance-editorial__grid, .performance-grid, .service-request__grid { gap: 50px; }
