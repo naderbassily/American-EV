@@ -60,16 +60,30 @@ function aev_home_anchor( $anchor ) {
 }
 
 function aev_fallback_menu() {
+	$about = get_page_by_path( 'about' );
 	$links = array(
-		'services'    => __( 'Services', 'american-ev' ),
-		'parts'       => __( 'Parts', 'american-ev' ),
-		'maintenance' => __( 'Maintenance', 'american-ev' ),
-		'process'     => __( 'About', 'american-ev' ),
+		array(
+			'label'   => __( 'Services', 'american-ev' ),
+			'url'     => home_url( '/services/' ),
+			'current' => is_page( 'services' ),
+		),
+		array( 'label' => __( 'Parts', 'american-ev' ), 'url' => aev_home_anchor( 'parts' ), 'current' => false ),
+		array( 'label' => __( 'Maintenance', 'american-ev' ), 'url' => aev_home_anchor( 'maintenance' ), 'current' => false ),
+		array(
+			// Falls back to the homepage anchor until the About page exists.
+			'label'   => __( 'About', 'american-ev' ),
+			'url'     => $about ? get_permalink( $about ) : aev_home_anchor( 'process' ),
+			'current' => $about && is_page( $about->ID ),
+		),
 	);
-	foreach ( $links as $anchor => $label ) {
-		$is_current = is_page( 'services' ) && 'services' === $anchor;
-		$url        = 'services' === $anchor ? home_url( '/services/' ) : aev_home_anchor( $anchor );
-		printf( '<a href="%1$s"%2$s%3$s>%4$s</a>', esc_url( $url ), $is_current ? ' class="is-current"' : '', $is_current ? ' aria-current="page"' : '', esc_html( $label ) );
+	foreach ( $links as $link ) {
+		printf(
+			'<a href="%1$s"%2$s%3$s>%4$s</a>',
+			esc_url( $link['url'] ),
+			$link['current'] ? ' class="is-current"' : '',
+			$link['current'] ? ' aria-current="page"' : '',
+			esc_html( $link['label'] )
+		);
 	}
 }
 
@@ -576,3 +590,53 @@ add_filter( 'woocommerce_product_tabs', function ( $tabs ) {
 	}
 	return $tabs;
 }, 97 );
+
+/**
+ * Echo each non-empty line of a block of copy as its own paragraph.
+ * Lets a plain ACF textarea drive multi-paragraph sections.
+ */
+function aev_paragraphs( $text, $class = '' ) {
+	$lines = array_filter( array_map( 'trim', preg_split( '/\R/', (string) $text ) ) );
+	foreach ( $lines as $line ) {
+		printf( '<p%1$s>%2$s</p>', $class ? ' class="' . esc_attr( $class ) . '"' : '', esc_html( $line ) );
+	}
+}
+
+function aev_about_acf_fields() {
+	if ( ! function_exists( 'acf_add_local_field_group' ) ) {
+		return;
+	}
+	$text     = function ( $key, $label, $name, $rows = 2 ) {
+		return array( 'key' => $key, 'label' => $label, 'name' => $name, 'type' => 'textarea', 'rows' => $rows, 'new_lines' => '' );
+	};
+	$image    = function ( $key, $label, $name ) {
+		return array( 'key' => $key, 'label' => $label, 'name' => $name, 'type' => 'image', 'return_format' => 'array', 'preview_size' => 'medium' );
+	};
+	acf_add_local_field_group( array(
+		'key'    => 'group_aev_about',
+		'title'  => 'American EV About Page',
+		'fields' => array(
+			$text( 'field_aev_about_hero_title', 'Hero Title', 'about_hero_title' ),
+			$text( 'field_aev_about_hero_body', 'Hero Description', 'about_hero_body', 3 ),
+			$image( 'field_aev_about_hero_image', 'Hero Image', 'about_hero_image' ),
+			$text( 'field_aev_about_who_title', 'Who We Are Title', 'about_who_title' ),
+			$text( 'field_aev_about_who_body', 'Who We Are Copy', 'about_who_body', 6 ),
+			$image( 'field_aev_about_who_image', 'Who We Are Image', 'about_who_image' ),
+			$text( 'field_aev_about_why_title', 'Why We Are Here Title', 'about_why_title' ),
+			$text( 'field_aev_about_why_body', 'Why We Are Here Copy', 'about_why_body', 5 ),
+			$image( 'field_aev_about_why_image', 'Why We Are Here Image', 'about_why_image' ),
+			$text( 'field_aev_about_approach_title', 'Approach Title', 'about_approach_title', 3 ),
+			$text( 'field_aev_about_approach_body', 'Approach Description', 'about_approach_body', 3 ),
+			$text( 'field_aev_about_support_title', 'Who We Support Title', 'about_support_title' ),
+			$image( 'field_aev_about_support_image', 'Who We Support Image', 'about_support_image' ),
+			$text( 'field_aev_about_cta_title', 'Closing CTA Title', 'about_cta_title' ),
+			$text( 'field_aev_about_cta_body', 'Closing CTA Description', 'about_cta_body', 3 ),
+			$image( 'field_aev_about_cta_image', 'Closing CTA Image', 'about_cta_image' ),
+		),
+		'location'        => array( array( array( 'param' => 'page_template', 'operator' => '==', 'value' => 'page-about.php' ) ) ),
+		'position'        => 'acf_after_title',
+		'label_placement' => 'top',
+		'active'          => true,
+	) );
+}
+add_action( 'acf/init', 'aev_about_acf_fields' );
