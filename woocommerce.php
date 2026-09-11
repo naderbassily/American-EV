@@ -35,6 +35,11 @@
 		</section>
 	</main>
 <?php else : ?>
+	<?php /* woocommerce_content() emits no wrapper of its own, so fire the theme's
+	         content-wrapper hooks around it - otherwise single products and product
+	         taxonomy archives render straight into <body> with no <main>. */ ?>
+	<?php do_action( 'woocommerce_before_main_content' ); ?>
 	<?php woocommerce_content(); ?>
+	<?php do_action( 'woocommerce_after_main_content' ); ?>
 <?php endif; ?>
 <?php get_footer(); ?>
