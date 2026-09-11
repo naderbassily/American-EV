@@ -299,3 +299,41 @@ add_filter( 'woocommerce_loop_add_to_cart_link', 'aev_loop_order_now_button', 10
  */
 remove_action( 'woocommerce_before_main_content', 'woocommerce_breadcrumb', 20 );
 remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_meta', 40 );
+
+/**
+ * Product benefit row - the four callouts from the product flyer, rendered as
+ * text plus inline SVG rather than a flattened image so they stay legible,
+ * selectable and translatable.
+ */
+function aev_product_benefit_icon( $name ) {
+	$open  = '<svg class="product-benefits__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">';
+	$paths = array(
+		'airflow' => '<path d="M3 8h9a3 3 0 1 0-3-3"/><path d="M3 12h12.5a3 3 0 1 1-3 3"/><path d="M3 16h6"/>',
+		'shield'  => '<path d="M12 3 4.5 6v5.4c0 4.3 3.1 7.7 7.5 9.1 4.4-1.4 7.5-4.8 7.5-9.1V6L12 3Z"/><path d="m8.9 11.9 2.3 2.3 4-4.4"/>',
+		'wrench'  => '<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.8-3.8a6 6 0 0 1-8 8l-6.9 6.9a2.1 2.1 0 0 1-3-3l6.9-6.9a6 6 0 0 1 8-8l-3.8 3.8Z"/>',
+		'charger' => '<rect x="4" y="3" width="10" height="18" rx="2.5"/><path d="M10.2 7.2 7.8 11.4h2.4l-.6 3.6 2.7-4.4h-2.4l.3-3.4Z" fill="currentColor" stroke="none"/><path d="M17.5 10H19a2 2 0 0 1 2 2v3.8a1.6 1.6 0 0 1-3.2 0V13h-1.3"/>',
+	);
+	return isset( $paths[ $name ] ) ? $open . $paths[ $name ] . '</svg>' : '';
+}
+
+function aev_product_benefits() {
+	$benefits = array(
+		array( 'airflow', __( 'Supports proper airflow', 'american-ev' ), __( 'Helps maintain cooling efficiency', 'american-ev' ) ),
+		array( 'shield', __( 'Preventive maintenance', 'american-ev' ), __( 'Helps reduce dust build-up', 'american-ev' ) ),
+		array( 'wrench', __( 'Easy to replace', 'american-ev' ), __( 'Designed for quick and simple installation', 'american-ev' ) ),
+		array( 'charger', __( 'Supports charger reliability', 'american-ev' ), __( 'Helps keep your station operating at its best', 'american-ev' ) ),
+	);
+
+	echo '<ul class="product-benefits">';
+	foreach ( $benefits as $benefit ) {
+		list( $icon, $title, $copy ) = $benefit;
+		printf(
+			'<li class="product-benefits__item">%1$s<span class="product-benefits__title">%2$s</span><span class="product-benefits__copy">%3$s</span></li>',
+			aev_product_benefit_icon( $icon ), // phpcs:ignore WordPress.Security.EscapeOutput -- fixed inline SVG.
+			esc_html( $title ),
+			esc_html( $copy )
+		);
+	}
+	echo '</ul>';
+}
+add_action( 'woocommerce_single_product_summary', 'aev_product_benefits', 25 );
