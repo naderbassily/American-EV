@@ -8,7 +8,7 @@
 					<h1 class="display">Filters that keep every charge moving.</h1>
 					<p class="lead">Replacement air filters and service components for commercial EV charging equipment.</p>
 				</div>
-				<div class="filters-hero__visual" data-reveal><img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/replacement-filters.png' ); ?>" alt="Replacement filters for commercial EV charging equipment"></div>
+				<div class="filters-hero__visual" data-reveal><img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/filters-hero.webp' ); ?>" width="1600" height="527" alt="<?php esc_attr_e( 'Range of replacement air filters for commercial EV charging equipment', 'american-ev' ); ?>"></div>
 			</div>
 		</section>
 		<section class="section filters-catalog" id="filter-products">
