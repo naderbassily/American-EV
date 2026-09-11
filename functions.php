@@ -247,3 +247,26 @@ function aev_redirect_legacy_shop() {
 	}
 }
 add_action( 'template_redirect', 'aev_redirect_legacy_shop', 1 );
+
+/**
+ * WordPress rewrite rules are case-sensitive, so /FILTERS/ misses the product
+ * archive rule and falls back to the shop page object with no products in the
+ * loop. Send mis-cased shop URLs to the canonical permalink instead.
+ */
+function aev_redirect_miscased_shop() {
+	if ( ! class_exists( 'WooCommerce' ) || is_front_page() ) {
+		return;
+	}
+	$shop_id = wc_get_page_id( 'shop' );
+	if ( $shop_id <= 0 || ! is_page( $shop_id ) ) {
+		return;
+	}
+	$shop_url  = wc_get_page_permalink( 'shop' );
+	$requested = trim( (string) wp_parse_url( $_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH ), '/' );
+	$canonical = trim( (string) wp_parse_url( $shop_url, PHP_URL_PATH ), '/' );
+	if ( '' !== $canonical && $requested !== $canonical && strtolower( $requested ) === strtolower( $canonical ) ) {
+		wp_safe_redirect( $shop_url, 301 );
+		exit;
+	}
+}
+add_action( 'template_redirect', 'aev_redirect_miscased_shop', 1 );
