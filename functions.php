@@ -291,3 +291,11 @@ function aev_loop_order_now_button( $link, $product ) {
 	);
 }
 add_filter( 'woocommerce_loop_add_to_cart_link', 'aev_loop_order_now_button', 10, 2 );
+
+/**
+ * Product pages run without breadcrumbs, and without the meta block - the only
+ * thing it currently renders is an "Uncategorized" category link. Re-add either
+ * line to bring them back.
+ */
+remove_action( 'woocommerce_before_main_content', 'woocommerce_breadcrumb', 20 );
+remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_meta', 40 );
