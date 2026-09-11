@@ -10,7 +10,7 @@ get_header();
 $hero_image    = aev_image_url( 'about_hero_image', '/assets/images/services-hero-maintenance.webp' );
 $who_image     = aev_image_url( 'about_who_image', '/assets/images/commercial-charging-hero.webp' );
 $why_image     = aev_image_url( 'about_why_image', '/assets/images/replacement-filters.webp' );
-$support_image = aev_image_url( 'about_support_image', '/assets/images/commercial-charging-hero.webp' );
+$support_image = aev_image_url( 'about_support_image', '/assets/images/about-support-plaza.webp' );
 $cta_image     = aev_image_url( 'about_cta_image', '/assets/images/about-cta-plaza.webp' );
 $shop_url      = class_exists( 'WooCommerce' ) ? wc_get_page_permalink( 'shop' ) : aev_home_anchor( 'contact' );
 ?>
@@ -157,10 +157,14 @@ $shop_url      = class_exists( 'WooCommerce' ) ? wc_get_page_permalink( 'shop' )
 
 	<section class="section about-support" id="who-we-support">
 		<div class="container about-support__grid" data-reveal>
-			<div class="about-support__copy">
+			<div class="about-support__head">
 				<p class="eyebrow eyebrow--blue"><?php esc_html_e( 'Who We Support', 'american-ev' ); ?></p>
 				<h2 class="section-title"><?php echo wp_kses_post( nl2br( esc_html( aev_field( 'about_support_title', "Commercial charging\nenvironments of all kinds." ) ) ) ); ?></h2>
-				<div class="about-support__list">
+			</div>
+			<figure class="about-support__image">
+				<img src="<?php echo $support_image; // phpcs:ignore WordPress.Security.EscapeOutput -- escaped in aev_image_url(). ?>"<?php echo aev_theme_image_srcset( 'about-support-plaza', $support_image, array( 800 => 'about-support-plaza-800.webp', 1200 => 'about-support-plaza.webp' ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?> sizes="(max-width: 900px) 100vw, 1200px" width="1200" height="586" loading="lazy" alt="<?php esc_attr_e( 'Commercial EV charging stations in a parking area', 'american-ev' ); ?>">
+			</figure>
+			<div class="about-support__list">
 					<?php
 					$audiences = array(
 						array(
@@ -186,12 +190,8 @@ $shop_url      = class_exists( 'WooCommerce' ) ? wc_get_page_permalink( 'shop' )
 							<h3><?php echo esc_html( $audience['title'] ); ?></h3>
 							<p><?php echo esc_html( $audience['copy'] ); ?></p>
 						</article>
-					<?php endforeach; ?>
-				</div>
+				<?php endforeach; ?>
 			</div>
-			<figure class="about-support__image">
-				<img src="<?php echo $support_image; // phpcs:ignore WordPress.Security.EscapeOutput -- escaped in aev_image_url(). ?>" loading="lazy" alt="<?php esc_attr_e( 'Row of commercial EV chargers', 'american-ev' ); ?>">
-			</figure>
 		</div>
 	</section>
 
