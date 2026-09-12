@@ -331,6 +331,26 @@ body.page-template-page-services .primary-nav > a:first-child, .primary-nav .is-
 .woocommerce form .form-row input.input-text, .woocommerce form .form-row textarea, .select2-container--default .select2-selection--single { padding: 12px; border: 1px solid #cfd6dd; border-radius: 10px; }
 .woocommerce .quantity .qty { min-height: 44px; border: 1px solid #cfd6dd; border-radius: 8px; }
 
+/* WooCommerce Blocks cart/checkout buttons - these render outside the classic
+   .woocommerce markup, so the theme's button rules never reached them. */
+.wp-block-woocommerce-cart .wc-block-cart__submit-button,
+.wp-block-woocommerce-checkout .wc-block-checkout__actions_row .wc-block-components-button,
+.wc-block-components-button.wc-block-cart__submit-button,
+.wc-block-components-button.wc-block-components-checkout-place-order-button {
+  min-height: 54px; padding: 15px 32px; display: inline-flex; align-items: center; justify-content: center;
+  border: 0; border-radius: 999px;
+  background-color: var(--aev-green); color: #fff;
+  font-family: inherit; font-size: 16px; font-weight: 700; line-height: 1.2; text-decoration: none;
+  transition: background-color .25s ease, transform .25s ease;
+}
+.wp-block-woocommerce-cart .wc-block-cart__submit-button:hover,
+.wp-block-woocommerce-checkout .wc-block-checkout__actions_row .wc-block-components-button:hover,
+.wc-block-components-button.wc-block-cart__submit-button:hover,
+.wc-block-components-button.wc-block-components-checkout-place-order-button:hover {
+  background-color: var(--aev-navy); color: #fff; transform: translateY(-2px);
+}
+.wc-block-components-button__text { color: inherit; }
+
 /* WooCommerce notices - replaces the default 3px top bar + boxed grey slab */
 .woocommerce-notices-wrapper:empty { display: none; }
 .woocommerce-notices-wrapper { margin-bottom: 26px; }
