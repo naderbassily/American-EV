@@ -14,7 +14,7 @@ $phone = aev_field( 'contact_phone', '404-309-4880' );
 					<h3><?php esc_html_e( 'Navigation', 'american-ev' ); ?></h3>
 					<ul>
 						<li><a href="<?php echo esc_url( home_url( '/services/' ) ); ?>">Services</a></li>
-						<li><a href="<?php echo esc_url( home_url( '/filters/' ) ); ?>">Filters</a></li>
+						<li><a href="<?php echo esc_url( home_url( '/filters/' ) ); ?>">Parts</a></li>
 						<li><a href="<?php echo esc_url( home_url( '/about/' ) ); ?>">About</a></li>
 						<li><a href="<?php echo esc_url( aev_contact_url( 'contact-form' ) ); ?>">Contact Us</a></li>
 					</ul>

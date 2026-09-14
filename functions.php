@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'AEV_THEME_VERSION', '1.3.3' );
+define( 'AEV_THEME_VERSION', '1.3.4' );
 define( 'AEV_NOTIFICATION_EMAIL', 'info@americanevsolutions.com' );
 define( 'AEV_FROM_EMAIL', 'info@americanevsolutions.com' );
 
@@ -245,7 +245,7 @@ function aev_fallback_menu() {
 			'current' => is_page( 'services' ),
 		),
 		array(
-			'label'   => __( 'Filters', 'american-ev' ),
+			'label'   => __( 'Parts', 'american-ev' ),
 			'url'     => home_url( '/filters/' ),
 			'current' => is_page( 'filters' ) || ( function_exists( 'is_shop' ) && is_shop() ),
 		),
@@ -266,6 +266,17 @@ function aev_fallback_menu() {
 		);
 	}
 }
+
+/** Keep the parts destination consistently labeled in editor-managed menus. */
+function aev_label_parts_menu_item( $items ) {
+	foreach ( $items as $item ) {
+		if ( false !== strpos( (string) $item->url, '/filters/' ) ) {
+			$item->title = __( 'Parts', 'american-ev' );
+		}
+	}
+	return $items;
+}
+add_filter( 'wp_nav_menu_objects', 'aev_label_parts_menu_item' );
 
 function aev_register_enquiry_type() {
 	register_post_type( 'aev_enquiry', array(
