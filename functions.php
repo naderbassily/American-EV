@@ -9,9 +9,29 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'AEV_THEME_VERSION', '1.3.0' );
+define( 'AEV_THEME_VERSION', '1.3.1' );
 define( 'AEV_NOTIFICATION_EMAIL', 'info@americanevsolutions.com' );
 define( 'AEV_FROM_EMAIL', 'info@americanevsolutions.com' );
+
+/**
+ * Receive theme updates from the stable GitHub branch through WordPress.
+ */
+function aev_init_github_theme_updater() {
+	$loader = get_template_directory() . '/inc/plugin-update-checker/plugin-update-checker.php';
+	if ( ! file_exists( $loader ) ) {
+		return;
+	}
+
+	require_once $loader;
+
+	$update_checker = \YahnisElsts\PluginUpdateChecker\v5\PucFactory::buildUpdateChecker(
+		'https://github.com/naderbassily/American-EV/',
+		__FILE__,
+		get_template()
+	);
+	$update_checker->setBranch( 'main' );
+}
+aev_init_github_theme_updater();
 
 function aev_setup() {
 	load_theme_textdomain( 'american-ev', get_template_directory() . '/languages' );
