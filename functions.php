@@ -9,7 +9,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'AEV_THEME_VERSION', '1.1.0' );
+define( 'AEV_THEME_VERSION', '1.3.0' );
+define( 'AEV_NOTIFICATION_EMAIL', 'info@americanevsolutions.com' );
+define( 'AEV_FROM_EMAIL', 'info@americanevsolutions.com' );
 
 function aev_setup() {
 	load_theme_textdomain( 'american-ev', get_template_directory() . '/languages' );
@@ -27,12 +29,150 @@ function aev_setup() {
 }
 add_action( 'after_setup_theme', 'aev_setup' );
 
+function aev_ensure_theme_pages() {
+	if ( AEV_THEME_VERSION === get_option( 'aev_required_pages_version' ) ) {
+		return;
+	}
+
+	$required_pages = array(
+		'contact' => array(
+			'title'    => __( 'Contact Us', 'american-ev' ),
+			'template' => 'page-contact.php',
+		),
+		'thank-you' => array(
+			'title'    => __( 'Thank You', 'american-ev' ),
+			'template' => 'page-thank-you.php',
+		),
+	);
+	$all_ready = true;
+
+	foreach ( $required_pages as $slug => $settings ) {
+		$page = get_page_by_path( $slug );
+		if ( ! $page ) {
+			$page_id = wp_insert_post( array(
+				'post_type'   => 'page',
+				'post_status' => 'publish',
+				'post_title'  => $settings['title'],
+				'post_name'   => $slug,
+			) );
+			if ( is_wp_error( $page_id ) || ! $page_id ) {
+				$all_ready = false;
+				continue;
+			}
+		} else {
+			$page_id = $page->ID;
+		}
+		update_post_meta( $page_id, '_wp_page_template', $settings['template'] );
+	}
+
+	if ( $all_ready ) {
+		update_option( 'aev_required_pages_version', AEV_THEME_VERSION, false );
+	}
+}
+add_action( 'init', 'aev_ensure_theme_pages', 20 );
+
 function aev_assets() {
 	wp_enqueue_style( 'aev-fonts', 'https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap', array(), null );
 	wp_enqueue_style( 'aev-style', get_stylesheet_uri(), array(), AEV_THEME_VERSION );
 	wp_enqueue_script( 'aev-theme', get_template_directory_uri() . '/assets/js/theme.js', array(), AEV_THEME_VERSION, true );
 }
 add_action( 'wp_enqueue_scripts', 'aev_assets' );
+
+function aev_clean_document_head() {
+	remove_action( 'wp_head', 'wp_generator' );
+	remove_action( 'wp_head', 'rsd_link' );
+	remove_action( 'wp_head', 'wlwmanifest_link' );
+	remove_action( 'wp_head', 'wp_shortlink_wp_head' );
+	remove_action( 'wp_head', 'wp_oembed_add_discovery_links' );
+	remove_action( 'wp_head', 'wp_site_icon', 99 );
+	remove_action( 'wp_head', 'rel_canonical' );
+}
+add_action( 'after_setup_theme', 'aev_clean_document_head', 20 );
+
+function aev_favicon_tags() {
+	$icon_url = get_template_directory_uri() . '/assets/favicon/';
+	?>
+	<link rel="icon" type="image/png" sizes="32x32" href="<?php echo esc_url( $icon_url . 'favicon-32.png' ); ?>">
+	<link rel="icon" type="image/png" sizes="16x16" href="<?php echo esc_url( $icon_url . 'favicon-16.png' ); ?>">
+	<link rel="apple-touch-icon" sizes="180x180" href="<?php echo esc_url( $icon_url . 'apple-touch-icon.png' ); ?>">
+	<link rel="icon" type="image/png" sizes="512x512" href="<?php echo esc_url( $icon_url . 'site-icon-512.png' ); ?>">
+	<meta name="theme-color" content="#071522">
+	<?php
+}
+add_action( 'wp_head', 'aev_favicon_tags', 2 );
+
+function aev_uses_seo_plugin() {
+	return defined( 'WPSEO_VERSION' )
+		|| defined( 'RANK_MATH_VERSION' )
+		|| defined( 'AIOSEO_VERSION' )
+		|| defined( 'SEOPRESS_VERSION' );
+}
+
+function aev_meta_description() {
+	$descriptions = array(
+		'services' => 'Replacement parts, component sourcing, and preventive maintenance support for commercial EV charging equipment.',
+		'filters'  => 'Replacement filters for commercial EV charging equipment, with practical support identifying the right component for your charger.',
+		'about'    => 'Learn how American EV Solutions supports commercial EV charging operators with practical parts sourcing and preventive maintenance.',
+		'contact'  => 'Contact American EV Solutions about commercial EV charging replacement parts, hard-to-source components, and preventive maintenance support.',
+	);
+
+	if ( is_front_page() ) {
+		return 'Commercial EV charging replacement parts, hard-to-source components, and preventive maintenance support from American EV Solutions.';
+	}
+	foreach ( $descriptions as $page => $description ) {
+		if ( is_page( $page ) || ( 'filters' === $page && function_exists( 'is_shop' ) && is_shop() ) ) {
+			return $description;
+		}
+	}
+	if ( is_singular() && has_excerpt() ) {
+		return wp_trim_words( wp_strip_all_tags( get_the_excerpt() ), 28, '' );
+	}
+	return get_bloginfo( 'description' );
+}
+
+function aev_meta_image_url() {
+	if ( is_singular() && has_post_thumbnail() ) {
+		$image = wp_get_attachment_image_url( get_post_thumbnail_id(), 'full' );
+		if ( $image ) {
+			return $image;
+		}
+	}
+	if ( is_page( array( 'services', 'about' ) ) ) {
+		return get_template_directory_uri() . '/assets/images/services-hero-maintenance.webp';
+	}
+	if ( is_page( 'filters' ) || ( function_exists( 'is_shop' ) && is_shop() ) ) {
+		return get_template_directory_uri() . '/assets/images/filters-hero.webp';
+	}
+	return get_template_directory_uri() . '/assets/images/commercial-charging-hero.webp';
+}
+
+function aev_meta_tags() {
+	if ( aev_uses_seo_plugin() || is_admin() || is_feed() || is_search() || is_404() || is_page( 'thank-you' ) ) {
+		return;
+	}
+	$description = aev_meta_description();
+	$title       = wp_get_document_title();
+	$canonical   = is_singular() ? get_permalink() : home_url( wp_parse_url( $_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH ) );
+	$image       = aev_meta_image_url();
+	$type        = is_singular( array( 'post', 'product' ) ) ? 'article' : 'website';
+	?>
+	<meta name="description" content="<?php echo esc_attr( $description ); ?>">
+	<link rel="canonical" href="<?php echo esc_url( $canonical ); ?>">
+	<meta property="og:locale" content="<?php echo esc_attr( get_locale() ); ?>">
+	<meta property="og:type" content="<?php echo esc_attr( $type ); ?>">
+	<meta property="og:title" content="<?php echo esc_attr( $title ); ?>">
+	<meta property="og:description" content="<?php echo esc_attr( $description ); ?>">
+	<meta property="og:url" content="<?php echo esc_url( $canonical ); ?>">
+	<meta property="og:site_name" content="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>">
+	<meta property="og:image" content="<?php echo esc_url( $image ); ?>">
+	<meta property="og:image:alt" content="American EV Solutions commercial EV charging support">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:title" content="<?php echo esc_attr( $title ); ?>">
+	<meta name="twitter:description" content="<?php echo esc_attr( $description ); ?>">
+	<meta name="twitter:image" content="<?php echo esc_url( $image ); ?>">
+	<?php
+}
+add_action( 'wp_head', 'aev_meta_tags', 3 );
 
 function aev_field( $name, $default = '' ) {
 	if ( function_exists( 'get_field' ) ) {
@@ -59,6 +199,12 @@ function aev_home_anchor( $anchor ) {
 	return is_front_page() ? '#' . ltrim( $anchor, '#' ) : home_url( '/#' . ltrim( $anchor, '#' ) );
 }
 
+function aev_contact_url( $anchor = '' ) {
+	$contact = get_page_by_path( 'contact' );
+	$url     = $contact ? get_permalink( $contact ) : home_url( '/contact/' );
+	return $anchor ? $url . '#' . ltrim( $anchor, '#' ) : $url;
+}
+
 function aev_fallback_menu() {
 	$about = get_page_by_path( 'about' );
 	$links = array(
@@ -67,8 +213,11 @@ function aev_fallback_menu() {
 			'url'     => home_url( '/services/' ),
 			'current' => is_page( 'services' ),
 		),
-		array( 'label' => __( 'Parts', 'american-ev' ), 'url' => aev_home_anchor( 'parts' ), 'current' => false ),
-		array( 'label' => __( 'Maintenance', 'american-ev' ), 'url' => aev_home_anchor( 'maintenance' ), 'current' => false ),
+		array(
+			'label'   => __( 'Filters', 'american-ev' ),
+			'url'     => home_url( '/filters/' ),
+			'current' => is_page( 'filters' ) || ( function_exists( 'is_shop' ) && is_shop() ),
+		),
 		array(
 			// Falls back to the homepage anchor until the About page exists.
 			'label'   => __( 'About', 'american-ev' ),
@@ -89,7 +238,7 @@ function aev_fallback_menu() {
 
 function aev_register_enquiry_type() {
 	register_post_type( 'aev_enquiry', array(
-		'labels' => array( 'name' => __( 'Quote Requests', 'american-ev' ), 'singular_name' => __( 'Quote Request', 'american-ev' ) ),
+		'labels' => array( 'name' => __( 'Website Requests', 'american-ev' ), 'singular_name' => __( 'Website Request', 'american-ev' ) ),
 		'public' => false,
 		'show_ui' => true,
 		'show_in_menu' => true,
@@ -99,15 +248,30 @@ function aev_register_enquiry_type() {
 }
 add_action( 'init', 'aev_register_enquiry_type' );
 
+function aev_email_detail_row( $label, $value ) {
+	if ( '' === trim( (string) $value ) ) {
+		return '';
+	}
+	return sprintf(
+		'<tr><td style="width:38%%;padding:11px 16px 11px 0;border-bottom:1px solid #e2e7eb;color:#65717d;font-size:13px;line-height:1.5;vertical-align:top;">%1$s</td><td style="padding:11px 0;border-bottom:1px solid #e2e7eb;color:#102337;font-size:14px;font-weight:600;line-height:1.5;vertical-align:top;">%2$s</td></tr>',
+		esc_html( $label ),
+		esc_html( $value )
+	);
+}
+
 function aev_handle_quote_request() {
 	$requested_redirect = isset( $_POST['redirect_to'] ) ? esc_url_raw( wp_unslash( $_POST['redirect_to'] ) ) : '';
 	$redirect           = wp_validate_redirect( $requested_redirect, home_url( '/#contact' ) );
-	if ( ! isset( $_POST['aev_quote_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['aev_quote_nonce'] ) ), 'aev_quote_request' ) ) {
+	$success_redirect   = home_url( '/thank-you/' );
+	$nonce_is_valid = isset( $_POST['aev_quote_nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['aev_quote_nonce'] ) ), 'aev_quote_request' );
+	// Logged-out forms may be served from a full-page cache after a WordPress nonce expires.
+	// The public form is protected by its honeypot below; logged-in submissions still require a valid nonce.
+	if ( is_user_logged_in() && ! $nonce_is_valid ) {
 		wp_safe_redirect( add_query_arg( 'quote', 'invalid', $redirect ) );
 		exit;
 	}
 	if ( ! empty( $_POST['company_url'] ) ) {
-		wp_safe_redirect( add_query_arg( 'quote', 'success', $redirect ) );
+		wp_safe_redirect( $success_redirect );
 		exit;
 	}
 	$name    = isset( $_POST['name'] ) ? sanitize_text_field( wp_unslash( $_POST['name'] ) ) : '';
@@ -115,6 +279,9 @@ function aev_handle_quote_request() {
 	$phone   = isset( $_POST['phone'] ) ? sanitize_text_field( wp_unslash( $_POST['phone'] ) ) : '';
 	$company = isset( $_POST['company'] ) ? sanitize_text_field( wp_unslash( $_POST['company'] ) ) : '';
 	$service = isset( $_POST['service'] ) ? sanitize_text_field( wp_unslash( $_POST['service'] ) ) : '';
+	$form_type = isset( $_POST['form_type'] ) && 'general' === sanitize_key( wp_unslash( $_POST['form_type'] ) ) ? 'general' : 'service';
+	$form_url_raw = isset( $_POST['form_url'] ) ? esc_url_raw( wp_unslash( $_POST['form_url'] ) ) : '';
+	$form_url     = wp_validate_redirect( $form_url_raw, home_url( '/' ) );
 	$message = isset( $_POST['message'] ) ? sanitize_textarea_field( wp_unslash( $_POST['message'] ) ) : '';
 	$charger_manufacturer = isset( $_POST['charger_manufacturer'] ) ? sanitize_text_field( wp_unslash( $_POST['charger_manufacturer'] ) ) : '';
 	$charger_model        = isset( $_POST['charger_model'] ) ? sanitize_text_field( wp_unslash( $_POST['charger_model'] ) ) : '';
@@ -123,11 +290,12 @@ function aev_handle_quote_request() {
 		wp_safe_redirect( add_query_arg( 'quote', 'required', $redirect ) );
 		exit;
 	}
-	$body = sprintf( "Name: %s\nEmail: %s\nPhone: %s\nCompany: %s\nRequest: %s\nCharger manufacturer: %s\nCharger model: %s\nPart number: %s\n\n%s", $name, $email, $phone, $company, $service, $charger_manufacturer, $charger_model, $part_number, $message );
+	$request_label = 'general' === $form_type ? 'General inquiry' : 'Parts or service request';
+	$body = sprintf( "Form: %s\nName: %s\nEmail: %s\nPhone: %s\nCompany: %s\nRequest: %s\nCharger manufacturer: %s\nCharger model: %s\nPart number: %s\n\nMessage:\n%s", $request_label, $name, $email, $phone, $company, $service, $charger_manufacturer, $charger_model, $part_number, $message );
 	$post_id = wp_insert_post( array(
 		'post_type' => 'aev_enquiry',
 		'post_status' => 'private',
-		'post_title' => sprintf( '%s — %s', $name, current_time( 'M j, Y g:i a' ) ),
+		'post_title' => sprintf( '%s: %s — %s', $request_label, $name, current_time( 'M j, Y g:i a' ) ),
 		'post_content' => $body,
 	) );
 	if ( ! is_wp_error( $post_id ) ) {
@@ -135,6 +303,8 @@ function aev_handle_quote_request() {
 		update_post_meta( $post_id, '_aev_phone', $phone );
 		update_post_meta( $post_id, '_aev_company', $company );
 		update_post_meta( $post_id, '_aev_service', $service );
+		update_post_meta( $post_id, '_aev_form_type', $form_type );
+		update_post_meta( $post_id, '_aev_form_url', $form_url );
 		update_post_meta( $post_id, '_aev_charger_manufacturer', $charger_manufacturer );
 		update_post_meta( $post_id, '_aev_charger_model', $charger_model );
 		update_post_meta( $post_id, '_aev_part_number', $part_number );
@@ -153,9 +323,41 @@ function aev_handle_quote_request() {
 			}
 		}
 	}
-	$recipient = sanitize_email( aev_field( 'contact_email', get_option( 'admin_email' ) ) );
-	wp_mail( $recipient, sprintf( __( 'New quote request from %s', 'american-ev' ), $name ), $body, array( 'Reply-To: ' . $name . ' <' . $email . '>' ), $attachments );
-	wp_safe_redirect( add_query_arg( 'quote', 'success', $redirect ) );
+	$recipient = sanitize_email( AEV_NOTIFICATION_EMAIL );
+	$headers   = array(
+		'From: American EV Solutions <' . sanitize_email( AEV_FROM_EMAIL ) . '>',
+		'Reply-To: ' . $name . ' <' . $email . '>',
+		'Content-Type: text/html; charset=UTF-8',
+	);
+	$logo_url = get_template_directory_uri() . '/assets/images/email-logo.png';
+	$details  = aev_email_detail_row( 'Name', $name );
+	$details .= aev_email_detail_row( 'Email', $email );
+	$details .= aev_email_detail_row( 'Phone', $phone );
+	$details .= aev_email_detail_row( 'Company', $company );
+	$details .= aev_email_detail_row( 'Inquiry type', $service );
+	$details .= aev_email_detail_row( 'Charger manufacturer', $charger_manufacturer );
+	$details .= aev_email_detail_row( 'Charger model', $charger_model );
+	$details .= aev_email_detail_row( 'Part number', $part_number );
+	$email_body = sprintf(
+		'<!doctype html><html><body style="margin:0;padding:0;background:#f1f3f5;font-family:Arial,Helvetica,sans-serif;color:#102337;"><table role="presentation" width="100%%" cellspacing="0" cellpadding="0" border="0" style="width:100%%;background:#f1f3f5;"><tr><td align="center" style="padding:34px 16px;"><table role="presentation" width="640" cellspacing="0" cellpadding="0" border="0" style="width:100%%;max-width:640px;background:#ffffff;border-radius:18px;overflow:hidden;box-shadow:0 14px 40px rgba(0,31,63,.12);"><tr><td style="height:6px;background:#4ba271;font-size:0;line-height:0;">&nbsp;</td></tr><tr><td style="padding:24px 34px;background:#ffffff;border-bottom:1px solid #e7ebee;"><img src="%1$s" width="190" alt="American EV Solutions" style="display:block;width:190px;max-width:100%%;height:auto;border:0;"></td></tr><tr><td style="padding:34px;background:#071522;"><p style="margin:0 0 12px;color:#61b985;font-size:12px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;">New website inquiry</p><h1 style="margin:0;color:#ffffff;font-size:30px;line-height:1.2;letter-spacing:-.5px;">A new message from %2$s</h1><p style="margin:14px 0 0;color:#adbac5;font-size:15px;line-height:1.6;">Submitted through the American EV Solutions website.</p></td></tr><tr><td style="padding:30px 34px 8px;"><h2 style="margin:0 0 10px;color:#102337;font-size:19px;line-height:1.3;">Inquiry details</h2><table role="presentation" width="100%%" cellspacing="0" cellpadding="0" border="0">%3$s</table></td></tr><tr><td style="padding:22px 34px 8px;"><h2 style="margin:0 0 12px;color:#102337;font-size:19px;line-height:1.3;">Message</h2><div style="padding:18px 20px;border-left:4px solid #4ba271;border-radius:8px;background:#f5f7f8;color:#33475b;font-size:15px;line-height:1.7;">%4$s</div></td></tr><tr><td style="padding:26px 34px 34px;"><a href="mailto:%5$s" style="display:inline-block;padding:13px 24px;border-radius:999px;background:#4ba271;color:#ffffff;font-size:14px;font-weight:700;text-decoration:none;">Reply to %2$s</a></td></tr><tr><td style="padding:20px 34px;background:#f7f8f9;border-top:1px solid #e4e8eb;color:#65717d;font-size:12px;line-height:1.6;">Submitted from: <a href="%6$s" style="color:#2d66c3;text-decoration:none;word-break:break-all;">%6$s</a><br>This notification was sent by the American EV Solutions website.</td></tr></table></td></tr></table></body></html>',
+		esc_url( $logo_url ),
+		esc_html( $name ),
+		$details,
+		nl2br( esc_html( $message ) ),
+		esc_attr( $email ),
+		esc_url( $form_url )
+	);
+	$mail_sent = wp_mail(
+		$recipient,
+		'American EV solution inquiry',
+		$email_body,
+		$headers,
+		$attachments
+	);
+	if ( ! is_wp_error( $post_id ) ) {
+		update_post_meta( $post_id, '_aev_mail_sent', $mail_sent ? 'yes' : 'no' );
+	}
+	wp_safe_redirect( $success_redirect );
 	exit;
 }
 add_action( 'admin_post_nopriv_aev_quote_request', 'aev_handle_quote_request' );
@@ -640,3 +842,24 @@ function aev_about_acf_fields() {
 	) );
 }
 add_action( 'acf/init', 'aev_about_acf_fields' );
+
+function aev_contact_acf_fields() {
+	if ( ! function_exists( 'acf_add_local_field_group' ) ) {
+		return;
+	}
+	acf_add_local_field_group( array(
+		'key'    => 'group_aev_contact',
+		'title'  => 'American EV Contact Page',
+		'fields' => array(
+			array( 'key' => 'field_aev_contact_page_hero_title', 'label' => 'Hero Title', 'name' => 'contact_page_hero_title', 'type' => 'text' ),
+			array( 'key' => 'field_aev_contact_page_hero_body', 'label' => 'Hero Description', 'name' => 'contact_page_hero_body', 'type' => 'textarea', 'rows' => 3 ),
+			array( 'key' => 'field_aev_contact_page_form_title', 'label' => 'Form Section Title', 'name' => 'contact_page_form_title', 'type' => 'text' ),
+			array( 'key' => 'field_aev_contact_page_form_body', 'label' => 'Form Section Description', 'name' => 'contact_page_form_body', 'type' => 'textarea', 'rows' => 3 ),
+		),
+		'location'        => array( array( array( 'param' => 'page_template', 'operator' => '==', 'value' => 'page-contact.php' ) ) ),
+		'position'        => 'acf_after_title',
+		'label_placement' => 'top',
+		'active'          => true,
+	) );
+}
+add_action( 'acf/init', 'aev_contact_acf_fields' );

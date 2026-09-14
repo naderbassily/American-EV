@@ -3,8 +3,6 @@ get_header();
 $hero_image  = aev_image_url( 'hero_image', '/assets/images/commercial-charging-hero.webp' );
 $parts_image = aev_image_url( 'parts_image', '/assets/images/commercial-charging-hero.webp' );
 $hero_srcset = array( 900 => 'commercial-charging-hero-900.webp', 1600 => 'commercial-charging-hero.webp' );
-$email = aev_field( 'contact_email', 'info@americanevsolutions.com' );
-$phone = aev_field( 'contact_phone', '404-309-4880' );
 ?>
 <main class="site-main">
 	<section class="hero" id="top">
@@ -82,13 +80,18 @@ $phone = aev_field( 'contact_phone', '404-309-4880' );
 	<section class="section contact-section" id="contact"><div class="container">
 		<div class="contact-intro" data-reveal><h2 class="section-title"><?php echo esc_html( aev_field( 'contact_title', 'Keep your network moving.' ) ); ?></h2><p class="lead"><?php echo esc_html( aev_field( 'contact_body', 'Tell us what you need — from replacement parts to preventive maintenance — and our team will help identify the right solution for your charging equipment.' ) ); ?></p></div>
 		<div class="quote-card">
-			<?php if ( isset( $_GET['quote'] ) && 'success' === sanitize_key( wp_unslash( $_GET['quote'] ) ) ) : ?><div class="form-alert form-alert--success" role="status">Thanks—your request has been received. We’ll be in touch shortly.</div><?php elseif ( isset( $_GET['quote'] ) ) : ?><div class="form-alert form-alert--error" role="alert">Please check the required fields and try again.</div><?php endif; ?>
-			<form action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="post">
-				<input type="hidden" name="action" value="aev_quote_request"><?php wp_nonce_field( 'aev_quote_request', 'aev_quote_nonce' ); ?>
-				<div class="hp-field" aria-hidden="true"><label>Leave this field empty <input type="text" name="company_url" tabindex="-1" autocomplete="off"></label></div>
-				<div class="form-grid"><div class="field"><label for="quote-name">Name *</label><input id="quote-name" name="name" type="text" autocomplete="name" required></div><div class="field"><label for="quote-email">Email *</label><input id="quote-email" name="email" type="email" autocomplete="email" required></div><div class="field"><label for="quote-phone">Phone</label><input id="quote-phone" name="phone" type="tel" autocomplete="tel"></div><div class="field"><label for="quote-company">Company</label><input id="quote-company" name="company" type="text" autocomplete="organization"></div><div class="field field--full"><label for="quote-service">How can we help?</label><select id="quote-service" name="service"><option value="Parts">Replacement parts</option><option value="Maintenance">Preventive maintenance</option><option value="Parts and maintenance">Parts and maintenance</option><option value="Other">Other</option></select></div><div class="field field--full"><label for="quote-message">Tell us about your equipment, sites, or service needs *</label><textarea id="quote-message" name="message" required></textarea></div></div>
-				<div class="form-actions"><button class="btn" type="submit">Request a quote</button><div class="form-contact"><a href="mailto:<?php echo esc_attr( antispambot( $email ) ); ?>"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg><span><?php echo esc_html( antispambot( $email ) ); ?></span></a><a href="tel:<?php echo esc_attr( preg_replace( '/[^0-9+]/', '', $phone ) ); ?>"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.69 2.8a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.33 1.84.56 2.8.69A2 2 0 0 1 22 16.92Z"/></svg><span><?php echo esc_html( $phone ); ?></span></a></div></div>
-			</form>
+			<?php
+			get_template_part(
+				'template-parts/request-form',
+				null,
+				array(
+					'form_id'      => 'home-request',
+					'form_type'    => 'service',
+					'redirect_to'  => home_url( '/#contact' ),
+					'button_label' => __( 'Send Request', 'american-ev' ),
+				)
+			);
+			?>
 		</div>
 	</div></section>
 </main>

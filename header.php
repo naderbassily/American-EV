@@ -26,7 +26,7 @@
 			<?php if ( class_exists( 'WooCommerce' ) && WC()->cart && WC()->cart->get_cart_contents_count() > 0 ) : ?>
 				<a class="cart-link" href="<?php echo esc_url( wc_get_cart_url() ); ?>"><?php esc_html_e( 'Cart', 'american-ev' ); ?> <span>(<?php echo esc_html( WC()->cart ? WC()->cart->get_cart_contents_count() : 0 ); ?>)</span></a>
 			<?php endif; ?>
-			<a class="btn header-cta" href="<?php echo esc_url( aev_home_anchor( 'contact' ) ); ?>"><?php esc_html_e( 'Request a quote', 'american-ev' ); ?></a>
+			<a class="btn header-cta" href="<?php echo esc_url( aev_contact_url( 'contact-form' ) ); ?>"><?php esc_html_e( 'Contact Us', 'american-ev' ); ?></a>
 			<button class="menu-toggle" type="button" aria-controls="primary-navigation" aria-expanded="false"><span></span><span class="screen-reader-text"><?php esc_html_e( 'Toggle menu', 'american-ev' ); ?></span></button>
 		</div>
 	</div>

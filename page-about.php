@@ -25,7 +25,7 @@ $shop_url      = class_exists( 'WooCommerce' ) ? wc_get_page_permalink( 'shop' )
 				<p class="eyebrow"><?php esc_html_e( 'About American EV Solutions', 'american-ev' ); ?></p>
 				<h1 class="display"><?php echo wp_kses_post( nl2br( esc_html( aev_field( 'about_hero_title', "Practical support for a\nchanging EV landscape." ) ) ) ); ?></h1>
 				<p class="lead"><?php echo esc_html( aev_field( 'about_hero_body', 'American EV Solutions supports commercial EV charging infrastructure with replacement parts, component sourcing, and preventive maintenance solutions built around real equipment needs.' ) ); ?></p>
-				<a class="btn" href="<?php echo esc_url( aev_home_anchor( 'contact' ) ); ?>"><?php esc_html_e( 'Contact Us', 'american-ev' ); ?></a>
+				<a class="btn" href="<?php echo esc_url( aev_contact_url( 'contact-form' ) ); ?>"><?php esc_html_e( 'Contact Us', 'american-ev' ); ?></a>
 			</div>
 			<p class="about-hero__stamp" aria-hidden="true"><?php esc_html_e( 'Keeping chargers working', 'american-ev' ); ?></p>
 		</div>
@@ -205,7 +205,7 @@ $shop_url      = class_exists( 'WooCommerce' ) ? wc_get_page_permalink( 'shop' )
 			<p class="lead"><?php echo esc_html( aev_field( 'about_cta_body', 'Tell us what you’re working with. We’ll help identify the right next step — whether that’s a replacement component, part sourcing, or preventive maintenance support.' ) ); ?></p>
 			<div class="about-cta__actions">
 				<a class="btn" href="<?php echo esc_url( $shop_url ); ?>"><?php esc_html_e( 'Request a Part', 'american-ev' ); ?></a>
-				<a class="btn btn--ghost" href="<?php echo esc_url( aev_home_anchor( 'contact' ) ); ?>"><?php esc_html_e( 'Contact Us', 'american-ev' ); ?></a>
+				<a class="btn btn--ghost" href="<?php echo esc_url( aev_contact_url( 'contact-form' ) ); ?>"><?php esc_html_e( 'Contact Us', 'american-ev' ); ?></a>
 			</div>
 		</div>
 	</section>

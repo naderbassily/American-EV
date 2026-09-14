@@ -7,8 +7,6 @@
 
 get_header();
 
-$email = aev_field( 'contact_email', 'info@americanevsolutions.com' );
-$phone = aev_field( 'contact_phone', '404-309-4880' );
 ?>
 <main class="site-main services-page">
 	<section class="services-hero" id="top">
@@ -81,13 +79,18 @@ $phone = aev_field( 'contact_phone', '404-309-4880' );
 		<div class="container service-request__grid" data-reveal>
 			<div class="service-request__intro"><p class="eyebrow eyebrow--blue">Request Support</p><h2 class="section-title"><?php echo wp_kses_post( nl2br( esc_html( aev_field( 'services_request_title', "Looking for a specific\npart or service?" ) ) ) ); ?></h2><p class="lead"><?php echo esc_html( aev_field( 'services_request_body', 'Tell us about your charger, component, or maintenance need and we’ll help determine the next step.' ) ); ?></p></div>
 			<div class="service-request__form">
-				<?php if ( isset( $_GET['quote'] ) && 'success' === sanitize_key( wp_unslash( $_GET['quote'] ) ) ) : ?><div class="form-alert form-alert--success" role="status">Thanks—your request has been received. We’ll be in touch shortly.</div><?php elseif ( isset( $_GET['quote'] ) ) : ?><div class="form-alert form-alert--error" role="alert">Please check the required fields and try again.</div><?php endif; ?>
-				<form action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="post" enctype="multipart/form-data">
-					<input type="hidden" name="action" value="aev_quote_request"><input type="hidden" name="redirect_to" value="<?php echo esc_url( get_permalink() . '#service-request' ); ?>"><?php wp_nonce_field( 'aev_quote_request', 'aev_quote_nonce' ); ?>
-					<div class="hp-field" aria-hidden="true"><label>Leave this field empty <input type="text" name="company_url" tabindex="-1" autocomplete="off"></label></div>
-					<div class="form-grid"><div class="field"><label for="service-name">Name *</label><input id="service-name" name="name" type="text" autocomplete="name" required></div><div class="field"><label for="service-email">Email *</label><input id="service-email" name="email" type="email" autocomplete="email" required></div><div class="field"><label for="service-company">Company</label><input id="service-company" name="company" type="text" autocomplete="organization"></div><div class="field"><label for="service-phone">Phone</label><input id="service-phone" name="phone" type="tel" autocomplete="tel"></div><div class="field field--full"><label for="service-type">What do you need?</label><select id="service-type" name="service"><option value="Replacement Part">Replacement Part</option><option value="Part Sourcing">Part Sourcing</option><option value="Preventive Maintenance">Preventive Maintenance</option><option value="General Inquiry">General Inquiry</option></select></div><div class="field"><label for="charger-manufacturer">Charger Manufacturer</label><input id="charger-manufacturer" name="charger_manufacturer" type="text"></div><div class="field"><label for="charger-model">Charger Model</label><input id="charger-model" name="charger_model" type="text"></div><div class="field field--full"><label for="part-number">Part Number</label><input id="part-number" name="part_number" type="text"></div><div class="field field--full"><label for="service-message">Tell us what you’re looking for *</label><textarea id="service-message" name="message" required></textarea></div><div class="field field--full"><label for="service-attachment">Upload Photo or Document</label><input id="service-attachment" name="attachment" type="file" accept="image/jpeg,image/png,image/webp,application/pdf"><small>Upload a component photo, equipment label, specification, or reference image.</small></div></div>
-					<div class="service-request__actions"><button class="btn" type="submit">Send Request</button><div class="form-contact"><a href="mailto:<?php echo esc_attr( antispambot( $email ) ); ?>"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg><span><?php echo esc_html( antispambot( $email ) ); ?></span></a><a href="tel:<?php echo esc_attr( preg_replace( '/[^0-9+]/', '', $phone ) ); ?>"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.69 2.8a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.33 1.84.56 2.8.69A2 2 0 0 1 22 16.92Z"/></svg><span><?php echo esc_html( $phone ); ?></span></a></div></div>
-				</form>
+				<?php
+				get_template_part(
+					'template-parts/request-form',
+					null,
+					array(
+						'form_id'      => 'services-request',
+						'form_type'    => 'service',
+						'redirect_to'  => get_permalink() . '#service-request',
+						'button_label' => __( 'Send Request', 'american-ev' ),
+					)
+				);
+				?>
 			</div>
 		</div>
 	</section>
