@@ -29,7 +29,10 @@ $phone = aev_field( 'contact_phone', '404-309-4880' );
 				</div>
 			</div>
 		</div>
-		<div class="footer-bottom"><span>© <?php echo esc_html( gmdate( 'Y' ) ); ?> American EV Solutions LLC.</span></div>
+		<div class="footer-bottom">
+			<span>© <?php echo esc_html( gmdate( 'Y' ) ); ?> American EV Solutions LLC.</span>
+			<p class="footer-disclaimer">American EV Solutions LLC is an independent aftermarket supplier and is not affiliated with, authorized by, or endorsed by ABB. References to ABB and Terra model names are used solely to identify product compatibility. All trademarks belong to their respective owners.</p>
+		</div>
 	</div>
 </footer>
 <?php wp_footer(); ?>

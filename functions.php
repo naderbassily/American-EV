@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'AEV_THEME_VERSION', '1.3.4' );
+define( 'AEV_THEME_VERSION', '1.3.5' );
 define( 'AEV_NOTIFICATION_EMAIL', 'info@americanevsolutions.com' );
 define( 'AEV_FROM_EMAIL', 'info@americanevsolutions.com' );
 
